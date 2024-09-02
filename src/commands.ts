@@ -23,7 +23,7 @@ export const handleCommand = async (
   const initiatorName = initiatorInfo[0].first_name;
   const initiatorId = context.senderId;
 
-  const initiatorLink = `@id${initiatorId} (${initiatorName})`;
+  const initiatorLink = `[id${initiatorId}|${initiatorName}]`;
 
   const target = targetUser.startsWith('@') ? targetUser : targetUser;
 
