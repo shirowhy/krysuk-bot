@@ -21,13 +21,10 @@ export const handleCommand = async (
   });
 
   const initiatorName = initiatorInfo[0].first_name;
-  const initiatorId = context.senderId;
-
-  const initiatorLink = `[id${initiatorId}|${initiatorName}]`;
 
   const target = targetUser.startsWith('@') ? targetUser : targetUser;
 
   const action = commands[command];
 
-  await context.send(`${initiatorLink} ${action} ${target}`);
+  await context.send(`${initiatorName} ${action} ${target}`);
 };
