@@ -27,7 +27,14 @@ updates.on('message_new', async (context) => {
     const targetUser = parts.slice(1).join(' ');
 
     if (command in commands) {
-      await handleCommand(context, vk, command, targetUser);
+      const initiatorInfo = await vk.api.users.get({ user_ids: [context.senderId.toString()] });
+      const initiatorName = initiatorInfo[0].first_name;
+
+      const initiatorLink = `[id${context.senderId}|${initiatorName}]`;
+
+      const responseMessage = `${initiatorLink} ${commands[command]} ${targetUser}`;
+
+      await context.send(responseMessage);
     }
   } else {
     const parts = messageText.split(' ');
@@ -35,7 +42,14 @@ updates.on('message_new', async (context) => {
     const targetUser = parts.slice(1).join(' ');
 
     if (command in commands) {
-      await handleCommand(context, vk, command, targetUser);
+      const initiatorInfo = await vk.api.users.get({ user_ids: [context.senderId.toString()] });
+      const initiatorName = initiatorInfo[0].first_name;
+
+      const initiatorLink = `[id${context.senderId}|${initiatorName}]`;
+
+      const responseMessage = `${initiatorLink} ${commands[command]} ${targetUser}`;
+
+      await context.send(responseMessage);
     }
   }
 });
