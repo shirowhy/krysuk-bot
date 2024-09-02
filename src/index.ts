@@ -26,6 +26,11 @@ updates.on('message_new', async (context) => {
     const command = parts[0].toLowerCase() as Command;
     const targetUser = parts.slice(1).join(' ');
 
+    if (command === 'шишка') {
+      await context.send('шишка');
+      return;
+    }
+
     if (command in commands) {
       const initiatorInfo = await vk.api.users.get({ user_ids: [context.senderId.toString()] });
       const initiatorName = initiatorInfo[0].first_name;
