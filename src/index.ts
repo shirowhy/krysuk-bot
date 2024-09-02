@@ -1,6 +1,7 @@
 import { VK } from 'vk-io';
 import { config } from './config';
-import { commands, handleCommand, Command } from './commands';
+import { commands, Command } from './commands';
+import { commandImages } from './commandImages';
 
 const vk = new VK({
   token: config.token
@@ -37,7 +38,17 @@ updates.on('message_new', async (context) => {
 
       const responseMessage = `${initiatorName} ${commands[command]} ${targetUser}`;
 
-      await context.send(responseMessage);
+      const images = commandImages[command];
+      let attachment = '';
+      if (images && images.length > 0) {
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        attachment = randomImage;
+      }
+
+      await context.send({
+        message: responseMessage,
+        attachment: attachment
+      });
     }
   } else {
     const parts = messageText.split(' ');
@@ -50,7 +61,17 @@ updates.on('message_new', async (context) => {
 
       const responseMessage = `${initiatorName} ${commands[command]} ${targetUser}`;
 
-      await context.send(responseMessage);
+      const images = commandImages[command];
+      let attachment = '';
+      if (images && images.length > 0) {
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        attachment = randomImage;
+      }
+
+      await context.send({
+        message: responseMessage,
+        attachment: attachment
+      });
     }
   }
 });
