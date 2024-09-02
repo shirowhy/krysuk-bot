@@ -8,7 +8,7 @@ const vk = new VK({
 
 const { updates } = vk;
 
-updates.on('message_new', async (context, next) => {
+updates.on('message_new', async (context) => {
   console.log('Received a new message...');
 
   if (context.isOutbox) {
@@ -38,8 +38,6 @@ updates.on('message_new', async (context, next) => {
       await handleCommand(context, vk, command, targetUser);
     }
   }
-
-  await next();
 });
 
 updates.start().then(() => {
