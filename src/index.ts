@@ -2,6 +2,8 @@ import { VK } from 'vk-io';
 import { config } from './config';
 import { commands, Command } from './commands';
 import { commandImages } from './commandImages';
+import axios from 'axios';
+import { PhotoAttachment } from 'vk-io';
 
 const vk = new VK({
   token: config.token
@@ -22,6 +24,35 @@ updates.on('message_new', async (context) => {
     return;
   }
 
+  const sendMessageWithAttachment = async (responseMessage: string, images: string[]) => {
+    let attachment = '';
+    if (images && images.length > 0) {
+      const randomImageUrl = images[Math.floor(Math.random() * images.length)];
+
+      try {
+        const imageBuffer = (await axios.get(randomImageUrl, { responseType: 'arraybuffer' })).data;
+
+        const photo = await vk.upload.messagePhoto({
+          source: { value: imageBuffer, filename: 'image.jpg' }
+        });
+
+        if (photo instanceof PhotoAttachment) {
+          attachment = `photo${photo.ownerId}_${photo.id}`;
+          console.log(`Selected image ID: ${attachment}`);
+        } else {
+          console.error('Failed to get photo attachment');
+        }
+      } catch (error) {
+        console.error('Failed to upload image:', error);
+      }
+    }
+
+    await context.send({
+      message: responseMessage,
+      attachment: attachment
+    });
+  };
+
   if (context.isChat) {
     const parts = messageText.split(' ');
     const command = parts[0].toLowerCase() as Command;
@@ -37,18 +68,9 @@ updates.on('message_new', async (context) => {
       const initiatorName = initiatorInfo[0].first_name;
 
       const responseMessage = `${initiatorName} ${commands[command]} ${targetUser}`;
-
       const images = commandImages[command];
-      let attachment = '';
-      if (images && images.length > 0) {
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-        attachment = randomImage;
-      }
 
-      await context.send({
-        message: responseMessage,
-        attachment: attachment
-      });
+      await sendMessageWithAttachment(responseMessage, images);
     }
   } else {
     const parts = messageText.split(' ');
@@ -60,18 +82,9 @@ updates.on('message_new', async (context) => {
       const initiatorName = initiatorInfo[0].first_name;
 
       const responseMessage = `${initiatorName} ${commands[command]} ${targetUser}`;
-
       const images = commandImages[command];
-      let attachment = '';
-      if (images && images.length > 0) {
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-        attachment = randomImage;
-      }
 
-      await context.send({
-        message: responseMessage,
-        attachment: attachment
-      });
+      await sendMessageWithAttachment(responseMessage, images);
     }
   }
 });
