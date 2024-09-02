@@ -21,12 +21,22 @@ updates.on('message_new', async (context, next) => {
     return;
   }
 
-  const parts = messageText.split(' ');
-  const command = parts[0].toLowerCase() as Command;
-  const targetUser = parts.slice(1).join(' ');
+  if (context.isChat) {
+    const parts = messageText.split(' ');
+    const command = parts[0].toLowerCase() as Command;
+    const targetUser = parts.slice(1).join(' ');
 
-  if (command in commands) {
-    await handleCommand(context, vk, command, targetUser);
+    if (command in commands) {
+      await handleCommand(context, vk, command, targetUser);
+    }
+  } else {
+    const parts = messageText.split(' ');
+    const command = parts[0].toLowerCase() as Command;
+    const targetUser = parts.slice(1).join(' ');
+
+    if (command in commands) {
+      await handleCommand(context, vk, command, targetUser);
+    }
   }
 
   await next();
