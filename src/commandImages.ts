@@ -63,9 +63,9 @@ export const commandImages: Record<Command, string[]> = {
   'отмудохать': [
   ],
   'пятюня': [
-    'photo330549637_457284037',
-    'photo330549637_457284038',
-    'photo330549637_457283965',
+    'https://sun9-5.userapi.com/impg/slRJd1ywpfuL9pT7GPY6BgywiU91MjHd77kIqQ/rrtRJTKWCs4.jpg?size=564x423&quality=95&sign=008d490102ec054669b6c8a095fca49d&type=album',
+    'https://sun9-21.userapi.com/impg/4US9ZlThCTLfUJ--r4lz6pbhRusYu4BwoU3Utw/S8PY1Qj4czI.jpg?size=177x285&quality=95&sign=9987ddfdc4198c689cd73f617c1c1b5c&type=album',
+    'https://sun6-21.userapi.com/impg/4OEzAfn1YYY5biq1qMkqY3W49aH1LWe9GSW7Aw/uBS1-X78-qY.jpg?size=811x807&quality=95&sign=9920d066aa125c264449871221c995e1&type=album',
   ],
   'пожать руку': [
     'https://sun9-59.userapi.com/impg/RF83_L-NuCS4s0F9B1StHlGDE7VFLh9mO-aI6Q/la7FPMyWrFc.jpg?size=564x317&quality=95&sign=6b82854db8ba8efb09bb83e8ed8f7efe&type=album',
