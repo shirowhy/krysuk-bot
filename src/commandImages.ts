@@ -93,6 +93,12 @@ export const commandImages: Record<Command, string[]> = {
     'https://sun9-79.userapi.com/impg/wWK2Qdozsoi8l1mOj1-k3qk8afw_UkB5XMFs2A/qERfkTESxrE.jpg?size=735x448&quality=95&sign=07acabe0a44f3c7f2439618039e31d8c&type=album',
     'https://sun9-17.userapi.com/impg/zzCKKT0pGnvny-8r-dEwkt4czvOp-6Rv3-CEmA/ysU_RW1aBys.jpg?size=564x564&quality=95&sign=daf52c235556b14d2e7c84e67fe0b81f&type=album',
   ],
+  'аминь': [
+    'https://sun9-48.userapi.com/impg/h1Yg5jqriLqVowBvimFiREfVTmo9fHurwVPcWA/AXHdftPtKnQ.jpg?size=858x540&quality=96&sign=34ab9613b3de935a1121aebfea584061&type=album',
+    'https://sun9-76.userapi.com/impg/b70fmR8Hm0Ikqk7i15PZY8I4tPxMC1PnEaY_2A/3AEt0QoT6tQ.jpg?size=752x500&quality=96&sign=f7b732ce3b54bd4568dde52e71be63c7&type=album',
+    'https://sun9-23.userapi.com/impg/vyex1NT0bwPNxlUh-2OGCStmTH3B9XgQ6Kc8JA/nTNTuHeFRNg.jpg?size=300x225&quality=96&sign=0b81ce0796910308e01c76b60948f1a8&type=album',
+    'https://sun9-31.userapi.com/impg/_DXomNTwdKJgC1CmH21FBNI11BDcE82gNdznaA/v1nTqxZauw8.jpg?size=1200x675&quality=96&sign=2060db9e2fd1762e9c27be7ee57c926f&type=album',
+  ],
   'шишка': [
     'https://sun9-58.userapi.com/impg/0RWw1NuhgBsxM9AG7AH6RrJt8eQdpH0KozEQXA/8Mxjir54KcA.jpg?size=564x705&quality=95&sign=2e71332fbfb65d41734a67a5f3195b8d&type=album',
     'https://sun9-59.userapi.com/impg/RGFQ_T1eIQpR3eqCfCUCzm_a-89Fwx6E9O9gEw/1Vl1ngIboiM.jpg?size=564x376&quality=95&sign=7034ee77ed12b552d6552a04d02cacf8&type=album',

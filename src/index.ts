@@ -59,7 +59,12 @@ updates.on('message_new', async (context) => {
     const targetUser = parts.slice(1).join(' ');
 
     if (command === 'шишка') {
-      await context.send('шишка');
+      const images = commandImages[command];
+      await sendMessageWithAttachment('шишка', images);
+      return;
+    } else if (command === 'потрогать траву') {
+      const images = commandImages[command];
+      await sendMessageWithAttachment('потрогать траву', images);
       return;
     }
 
