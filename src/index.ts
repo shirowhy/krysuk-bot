@@ -11,6 +11,20 @@ const vk = new VK({
 
 const { updates } = vk;
 
+const formatNameForCase = (name: string): string => {
+  const lastChar = name.slice(-1);
+  let formattedName = name;
+
+  switch (lastChar) {
+    case 'а':
+    case 'я':
+      formattedName = name.slice(0, -1) + 'е';
+      break;
+  }
+
+  return formattedName;
+};
+
 updates.on('message_new', async (context) => {
   console.log('Received a new message...');
 
@@ -56,7 +70,15 @@ updates.on('message_new', async (context) => {
   if (context.isChat) {
     const parts = messageText.split(' ');
     const command = parts[0].toLowerCase() as Command;
-    const targetUser = parts.slice(1).join(' ');
+    let targetUser = parts.slice(1).join(' ');
+
+    if (context.replyMessage) {
+      const replyUserId = context.replyMessage.senderId;
+      const replyUser = await vk.api.users.get({ user_ids: [replyUserId.toString()] });
+      if (replyUser && replyUser.length > 0) {
+        targetUser = formatNameForCase(replyUser[0].first_name);
+      }
+    }
 
     if (command === 'шишка') {
       const images = commandImages[command];
@@ -80,7 +102,7 @@ updates.on('message_new', async (context) => {
   } else {
     const parts = messageText.split(' ');
     const command = parts[0].toLowerCase() as Command;
-    const targetUser = parts.slice(1).join(' ');
+    let targetUser = parts.slice(1).join(' ');
 
     if (command in commands) {
       const initiatorInfo = await vk.api.users.get({ user_ids: [context.senderId.toString()] });
