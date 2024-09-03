@@ -68,7 +68,17 @@ updates.on('message_new', async (context) => {
   };
 
   if (context.isChat) {
-    const command = messageText.toLowerCase() as Command;
+    const parts = messageText.split(' ');
+    const command = parts[0].toLowerCase() as Command;
+    let targetUser = parts.slice(1).join(' ');
+
+    if (context.replyMessage) {
+      const replyUserId = context.replyMessage.senderId;
+      const replyUser = await vk.api.users.get({ user_ids: [replyUserId.toString()] });
+      if (replyUser && replyUser.length > 0) {
+        targetUser = formatNameForCase(replyUser[0].first_name);
+      }
+    }
 
     if (command === 'шишка') {
       const images = commandImages[command];
@@ -83,16 +93,9 @@ updates.on('message_new', async (context) => {
     if (command in commands) {
       const initiatorInfo = await vk.api.users.get({ user_ids: [context.senderId.toString()] });
       const initiatorName = initiatorInfo[0].first_name;
-      let targetUser = '';
 
-      if (context.replyMessage) {
-        const replyUserId = context.replyMessage.senderId;
-        const replyUser = await vk.api.users.get({ user_ids: [replyUserId.toString()] });
-        if (replyUser && replyUser.length > 0) {
-          targetUser = formatNameForCase(replyUser[0].first_name);
-        }
-      } else {
-        targetUser = messageText.split(' ').slice(1).join(' ');
+      if (!targetUser) {
+        targetUser = formatNameForCase(parts.slice(1).join(' '));
       }
 
       const responseMessage = `${initiatorName} ${commands[command]} ${targetUser}`;
