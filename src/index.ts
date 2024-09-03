@@ -85,8 +85,12 @@ updates.on('message_new', async (context) => {
       await sendMessageWithAttachment('шишка', images);
       return;
     } else if (command === 'потрогать траву') {
+      const initiatorInfo = await vk.api.users.get({ user_ids: [context.senderId.toString()] });
+      const initiatorName = initiatorInfo[0].first_name;
+
+      const responseMessage = `${initiatorName} ${commands[command]}`;
       const images = commandImages[command];
-      await sendMessageWithAttachment('трогает траву, релаксирует', images);
+      await sendMessageWithAttachment(responseMessage, images);
       return;
     }
 
