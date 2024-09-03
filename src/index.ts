@@ -68,9 +68,9 @@ updates.on('message_new', async (context) => {
   };
 
   if (context.isChat) {
-    const parts = messageText.split(' ');
-    const command = parts[0].toLowerCase() as Command;
-    let targetUser = parts.slice(1).join(' ');
+    const parts = messageText.toLowerCase().split(' ');
+    const command = parts.slice(0, 2).join(' ') as Command;
+    let targetUser = parts.slice(2).join(' ');
 
     if (context.replyMessage) {
       const replyUserId = context.replyMessage.senderId;
@@ -95,7 +95,7 @@ updates.on('message_new', async (context) => {
       const initiatorName = initiatorInfo[0].first_name;
 
       if (!targetUser) {
-        targetUser = formatNameForCase(parts.slice(1).join(' '));
+        targetUser = formatNameForCase(parts.slice(2).join(' '));
       }
 
       const responseMessage = `${initiatorName} ${commands[command]} ${targetUser}`;
