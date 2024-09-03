@@ -18,6 +18,7 @@ export const commandImages: Record<Command, string[]> = {
     'https://sun9-36.userapi.com/impg/_37ZbZyE6eBMfs56AWSBIZc52xYz66WgBNGR4A/PR0wG1yCFx0.jpg?size=563x542&quality=95&sign=63f61a0981285de9d4ba422f650ebbef&type=album',
     'https://sun9-11.userapi.com/impg/gqEK2vxmVPJ-VcxKqswkC3X61vaJRP54qJTCsg/T24oFCov2II.jpg?size=429x446&quality=95&sign=eefac72c860d1b04d36f15edd29ce8a3&type=album',
     'https://sun9-77.userapi.com/impg/ez2PNsDN8pImfJVVUZ28EnH-7eppp8U2t_5Iew/N7uOgBpfOVs.jpg?size=563x502&quality=95&sign=34843eefa660d2101fb921e147784824&type=album',
+    'https://sun9-41.userapi.com/impg/yL6kvSo8F5MsD_vR4jaMGZrx-63tZSN39DXaxw/q8Pe78kcbeI.jpg?size=1024x683&quality=95&sign=e2f595d21f338b50549e991fcd31a7f2&type=album',
   ],
   'обнять': [
     'https://sun9-78.userapi.com/impg/SVNJp_nCnyTfHr9R21x0ZJ9Rh7Bnu2fVzBVFJQ/WqMno69UjC4.jpg?size=500x500&quality=95&sign=518b5e400a8f2fb55936c670de9df1f1&type=album',
@@ -30,6 +31,7 @@ export const commandImages: Record<Command, string[]> = {
     'https://sun9-74.userapi.com/impg/LMNptyNwo__k4Mni3gl_zgHtyQp6__FpK7tZcQ/sXZSfCGUCSU.jpg?size=564x693&quality=95&sign=98c5053bee4b3f2562aaebebdeb11979&type=album',
     'https://sun9-46.userapi.com/impg/q7m1xd_kk_-gcfyCfqgjl9ZdAvlbkksZlT5nIw/tv6RIf9MsMw.jpg?size=564x1002&quality=95&sign=567cf56d947dc3004322235f2ec0a0d2&type=album',
     'https://sun9-23.userapi.com/impg/4K10jvUmhmoBZ9rm4c787SUOgr5Yjy5mlMJuLg/G1E08FGC5fg.jpg?size=564x546&quality=95&sign=682ae0a269304106f0ea0759c47a3efa&type=album',
+    'https://sun9-68.userapi.com/impg/lzahM5iV7fdTR1VEHtNnHL0VACRc053pCEHOfw/N5CNOCQUVs0.jpg?size=720x900&quality=96&sign=c29f31c7c712030a23fe919c5d3f823f&type=album',
   ],
   'поцеловать': [
     'https://sun9-24.userapi.com/impg/iix3YRFDfrES6Qhe6KTkwop8pEFAlx0SuxKgZA/IXH4lqnYwbA.jpg?size=563x751&quality=95&sign=86ed6df55742c7d8abc188a75798d210&type=album',
@@ -52,6 +54,7 @@ export const commandImages: Record<Command, string[]> = {
     'https://sun9-78.userapi.com/impg/uYJnr3gWEeCzuTx3850GqMDhp3R5TO2BafsdVQ/oIpVXLbPCZA.jpg?size=736x596&quality=95&sign=400be784bcfba649b866c8d2ba6e6a1c&type=album',
     'https://sun9-28.userapi.com/impg/taiMdyrw7RBKDifgB-u8qTZxx5DPn9aofvyEBA/hAtoMIb_bvE.jpg?size=564x561&quality=95&sign=901f9da35d55d92a913c9c920a2cba5f&type=album',
     'https://sun9-28.userapi.com/impg/lLjoPeYTFYQgSGCQCJLhRfDDluz3x9xzlKqq3A/chEF9LOh5vI.jpg?size=456x418&quality=95&sign=b312629f315d60a540a338854a18dc90&type=album',
+    'https://sun9-27.userapi.com/impg/PUsZQlbc_docqpbVITnAf9vvwhs7gNMBuI7NPg/0P9Jd8EFjmY.jpg?size=1080x1080&quality=96&sign=9fc21b578119a0877e792de969e3c428&type=album',
   ],
   'лизнуть': [
     'https://sun9-34.userapi.com/impg/swGJcZiJswkruaz4J8btUhK-Q7OPCWBVAJndLA/yfZtpUnrZK8.jpg?size=563x565&quality=95&sign=3d1df7b14ffeb283ab4dfc4bc0c921fa&type=album',
@@ -66,6 +69,12 @@ export const commandImages: Record<Command, string[]> = {
     'https://sun9-10.userapi.com/impg/Et2dRkG-xepy1ygEmV8LJzvoohQNaAq2k2g8JA/zXiB948uo8Q.jpg?size=564x502&quality=95&sign=b9c94fd350ca557fd0a3a8adb95593b2&type=album',
     'https://sun9-70.userapi.com/impg/1GLKxC2ILLg-hqvd13SmLjaiWzZK2PwSdIbFDQ/qmCN3jdhd_o.jpg?size=563x560&quality=95&sign=f51d4474608220ef481554930961dfe4&type=album',
     'https://sun9-49.userapi.com/impg/1VRbD4qGyK1Abv682ndNYuwErNlfIixc221_YA/DANOpQ09c2w.jpg?size=563x624&quality=95&sign=702c96ea4619e0b70e89fcbaba2728db&type=album',
+    'https://sun9-10.userapi.com/impg/mUQyVV1tllrkSoHB57Pha3JoGdYu-6cW0gy6fA/dtxKJzvijrw.jpg?size=1080x1343&quality=95&sign=59e6d731e5ceec0b5a1475b08c0cb3fd&type=album',
+    'https://sun9-68.userapi.com/impg/u_z70kCDK74mErnLleXXM-uu15vK2m4HI8QRlQ/Rtiz2OVclEI.jpg?size=844x848&quality=95&sign=89d29a4bb46470773de33ed002da50fc&type=album',
+    'https://sun9-53.userapi.com/impg/Py7-bA1PDksQMpSMh3yGGV1u2IvG12rH0ndknw/QIVgaJWtbQo.jpg?size=250x214&quality=95&sign=96cf30be4bfd4cb8191205f77b107f76&type=album',
+    'https://sun9-57.userapi.com/impg/hIyuOJqXHhBeYoUoElghluuNgcl6tQ_w8zGMrg/SmxDg7TP_Ww.jpg?size=643x634&quality=96&sign=6116730ddac7b2d3c51b6d1e7f6bdf83&type=album',
+    'https://sun9-50.userapi.com/impg/d1_d6SWg3_AVd_WAUx0Q1WiTEqgQ6-UXCbSjcw/hF0fg7__pMQ.jpg?size=583x567&quality=96&sign=ec32cbb387695abd5b5406db95657130&type=album',
+    'https://sun9-43.userapi.com/impg/BzjIpTyHJ5w5VfH0_gC8Y68d7fYjDUvPmrGYZg/T9Sb8d6VJkY.jpg?size=774x640&quality=96&sign=724b76bbd4376fd565559cee44e351bb&type=album',
   ],
   'отмудохать': [
   ],
@@ -82,15 +91,21 @@ export const commandImages: Record<Command, string[]> = {
     'https://sun9-13.userapi.com/impg/XDe1KblDX9RBJV7GtKMmTtsKtt-tu1CJBcqUeQ/bRDzUug1QNo.jpg?size=564x752&quality=95&sign=70077c82eea9b90847bc6164297d424a&type=album',
   ],
   'закопать': [
-    'https://sun9-15.userapi.com/s/v1/ig2/I4sy3zCDZbwicSgG6zCviGos5TPWZ9aVdqCUAZ11bnH8i1oXWDQdTPB7w_SDn4kW_mRcBkOrwB_ins7CzxjlVgCF.jpg?quality=95&as=32x20,48x30,72x45,108x67,160x99,240x149,360x224,480x298,540x336,640x398,720x447,985x612&from=bu&u=ETyS5DLqs4ZUqskDow4p4V79iRntFK4Y-MQp2KXy1ac&cs=985x612',
+    'https://sun9-15.userapi.com/impg/eFkg6d4qk5OfhZq__aDPiuQ5CjfJVoA0iwNNiw/2hFCa6mjMSA.jpg?size=985x612&quality=95&sign=f57cf826403e07cfd97ed3e9214c2f1e&type=album',
     'https://sun9-58.userapi.com/impg/540kjpwZ2OdSoySz4YTdb_yLBZTFpTr14Zc8RQ/CGoNABLUX-M.jpg?size=564x562&quality=95&sign=801ac9c95f4f8bbb64a54052ae7a9d5c&type=album',
     'https://sun9-44.userapi.com/impg/XkF0e8bSUzQlEcN2VXRQUsqrQL8p4pYEC87WZQ/QTcK8ypNyVA.jpg?size=563x561&quality=95&sign=66f1dc3608be1b32c4e525315e53ff4e&type=album',
     'https://sun9-60.userapi.com/impg/rBtq3kKC5_nw5Q6Z9uRDApG-vqZFNz45EwDGTA/gKYgCQJWGnQ.jpg?size=458x300&quality=95&sign=3306ee41dcfe790ede6d53a733edcbbc&type=album',
+    'https://sun9-72.userapi.com/impg/avuy79uz004CWLrGLmwd-9G4jlBF74cR40qRkw/Ayb7uFNMVqc.jpg?size=1080x682&quality=96&sign=9a9091b42f3e19cc8e967b7ca8d652c3&type=album',
   ],
   'жамк': [
     'https://sun9-77.userapi.com/impg/9CJ2gt-FShlfe9UnruV4bcZ4kcHzi2B9_ZTO5A/biZgK4psqTk.jpg?size=337x402&quality=95&sign=d7c34637e6ea4994b10d55f50fc8ebc5&type=album',
     'https://sun9-53.userapi.com/impg/ltJCZuq0Go_h9Al6oJMz5aUzDYsXmHNiS-lNJw/tKhEog6SgbE.jpg?size=563x463&quality=95&sign=d7c3541269606184b4d493751420055b&type=album',
     'https://sun9-52.userapi.com/impg/xmCZMh6m1EyaUych5phgkO_2QV_Y0FM0gFqUhg/1M-jeJIoEvs.jpg?size=564x805&quality=95&sign=506e6ba7801c17b48636e79a16aaa821&type=album',
+    'https://sun9-75.userapi.com/impg/jJd1AvXAfbj8IIt0YpBKUQ6CaW5Et8kB4nGaww/UWq915qDEhM.jpg?size=472x350&quality=96&sign=9ed662b09164d0d7c803c0c7f6698917&type=album',
+    'https://sun9-79.userapi.com/impg/p7EkALIxCinWNVgSBUDgGai_5PAD4YZz2fNSsQ/juaZHtFCDis.jpg?size=808x455&quality=96&sign=75907898491c5677ba75d193c94a7640&type=album',
+    'https://sun9-9.userapi.com/impg/S7azpSlhz_KQehsuEmWocs40Gf6imQDBd3pa4w/gykufXjiISA.jpg?size=735x683&quality=96&sign=9acd5a7dca684b01d3938456b807446d&type=album',
+    'https://sun9-31.userapi.com/impg/ALjqY3nV62RX233sIbUXtS8zrccn008ywE_Hsg/pWBGhTfH_Bw.jpg?size=482x239&quality=96&sign=3c4224bdfdd4c519b68458a6a3025add&type=album',
+    'https://sun9-74.userapi.com/impg/ZV6P-H8eLTFpAf2PbQHwh8Qh8vnr7EZfOzpjTw/2RwlxMHP21E.jpg?size=1080x998&quality=96&sign=a4f3ac364c624cf04c743383862866ba&type=album',
   ],
   'съесть': [
     'https://sun9-70.userapi.com/impg/ANJu9c71nZaCiJSipElDxy0g1tqi-Kui7Df0mw/ao6N8yXwvDc.jpg?size=564x379&quality=95&sign=7abf970834764b5b7d65237a5357d2d1&type=album',
@@ -113,5 +128,6 @@ export const commandImages: Record<Command, string[]> = {
     'https://sun9-72.userapi.com/impg/Lh0SicUqLr4KRXrZtgRpl2z3kMVNiCoaT-t8Mg/Cs0xoYN6vTA.jpg?size=564x618&quality=95&sign=4a06f7e8f4a77314b5055e84d3898649&type=album',
     'https://sun9-38.userapi.com/impg/DGPN2dQCwSr1G3dKVVdBhKtm22zsqweBtRSbrw/3H5nk8eyGrA.jpg?size=436x612&quality=95&sign=aea662a97db9b3ca6112055b92dbb3fd&type=album',
     'https://sun9-68.userapi.com/impg/hsa3JYD6y62PF7WtXnY2JFTjfppyS3lttjY2rw/9ROLdaEQ5hU.jpg?size=564x564&quality=95&sign=17a59a86faad72de1937fa01f58c997d&type=album',
+    'https://sun9-78.userapi.com/impf/daRBcq2SxmAqNvmXejXcIq1gZBxHoFm4MlqqVA/hZlt8vokrK4.jpg?size=86x130&quality=96&sign=edec034818494e9b0be5be9944840299&type=album',
   ],
 };

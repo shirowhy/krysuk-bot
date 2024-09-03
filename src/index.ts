@@ -69,8 +69,22 @@ updates.on('message_new', async (context) => {
 
   if (context.isChat) {
     const parts = messageText.toLowerCase().split(' ');
-    const command = parts.slice(0, 2).join(' ') as Command;
-    let targetUser = parts.slice(2).join(' ');
+    let command: Command;
+    let targetUser: string;
+
+    if (parts.length >= 2) {
+      const possibleCommand = parts.slice(0, 2).join(' ') as Command;
+      if (possibleCommand in commands) {
+        command = possibleCommand;
+        targetUser = parts.slice(2).join(' ');
+      } else {
+        command = parts[0] as Command;
+        targetUser = parts.slice(1).join(' ');
+      }
+    } else {
+      command = parts[0] as Command;
+      targetUser = parts.slice(1).join(' ');
+    }
 
     if (context.replyMessage) {
       const replyUserId = context.replyMessage.senderId;
@@ -97,10 +111,6 @@ updates.on('message_new', async (context) => {
     if (command in commands) {
       const initiatorInfo = await vk.api.users.get({ user_ids: [context.senderId.toString()] });
       const initiatorName = initiatorInfo[0].first_name;
-
-      if (!targetUser) {
-        targetUser = formatNameForCase(parts.slice(2).join(' '));
-      }
 
       const responseMessage = `${initiatorName} ${commands[command]} ${targetUser}`;
       const images = commandImages[command];
