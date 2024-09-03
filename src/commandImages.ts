@@ -114,12 +114,27 @@ export const commandImages: Record<Command, string[]> = {
   'откусить': [
     'https://sun9-79.userapi.com/impg/wWK2Qdozsoi8l1mOj1-k3qk8afw_UkB5XMFs2A/qERfkTESxrE.jpg?size=735x448&quality=95&sign=07acabe0a44f3c7f2439618039e31d8c&type=album',
     'https://sun9-17.userapi.com/impg/zzCKKT0pGnvny-8r-dEwkt4czvOp-6Rv3-CEmA/ysU_RW1aBys.jpg?size=564x564&quality=95&sign=daf52c235556b14d2e7c84e67fe0b81f&type=album',
+    'https://sun9-77.userapi.com/impf/yJaNS4m3NUw-qYG1IoAsxE45pkFBSAoR-xmRFw/33Kn0b55opk.jpg?size=1280x927&quality=96&sign=3e3938071a063e604951ba0a0525f1ff&type=album',
+    'https://sun9-16.userapi.com/impf/dE0OJ8JvnWko-U6as48tP7OzR-AsGWC2bHlmoQ/G-iZRJmFzDg.jpg?size=750x739&quality=96&sign=f84422353d1734d7da64cf15693d48a5&type=album',
+    'https://sun9-43.userapi.com/impf/71wxP9LDRlcyr2MzyFqWbR5So51Ac0r-xcgrxw/GfrjN4eL-zI.jpg?size=1160x808&quality=96&sign=e9cd4a302b497807f24e4495fe5a07a0&type=album',
   ],
   'аминь': [
     'https://sun9-48.userapi.com/impg/h1Yg5jqriLqVowBvimFiREfVTmo9fHurwVPcWA/AXHdftPtKnQ.jpg?size=858x540&quality=96&sign=34ab9613b3de935a1121aebfea584061&type=album',
     'https://sun9-76.userapi.com/impg/b70fmR8Hm0Ikqk7i15PZY8I4tPxMC1PnEaY_2A/3AEt0QoT6tQ.jpg?size=752x500&quality=96&sign=f7b732ce3b54bd4568dde52e71be63c7&type=album',
     'https://sun9-23.userapi.com/impg/vyex1NT0bwPNxlUh-2OGCStmTH3B9XgQ6Kc8JA/nTNTuHeFRNg.jpg?size=300x225&quality=96&sign=0b81ce0796910308e01c76b60948f1a8&type=album',
     'https://sun9-31.userapi.com/impg/_DXomNTwdKJgC1CmH21FBNI11BDcE82gNdznaA/v1nTqxZauw8.jpg?size=1200x675&quality=96&sign=2060db9e2fd1762e9c27be7ee57c926f&type=album',
+  ],
+  'обезвредить': [
+    'https://sun9-62.userapi.com/impg/h15MfPjQ3v8fitmqx-chduNPW05hB3V5REINDA/UVg170ikTkg.jpg?size=600x600&quality=95&sign=2fb66bcf5d22314b6195bfb02f55bf94&type=album',
+    'https://sun9-79.userapi.com/impg/Gz8mMgUdmOWWaZGCPxAyHzpFMuLNA9dLLDGAoQ/_wdOHa4LkXk.jpg?size=620x427&quality=95&sign=c7387342ddd1cb99e064fc7ab7170b9f&type=album',
+    'https://sun9-74.userapi.com/impg/xxfaamgrMeOL9w4VWoKVrTC9Jz-qRVBweR_2Sw/MLMMz_n-22k.jpg?size=375x219&quality=95&sign=d481994f09ec2cec8a05cf9f52d0601d&type=album',
+    'https://sun9-75.userapi.com/impg/YFmBajejUbDByRSo-tTofrmQzaGyXJTRezTyeg/zSllBXeId7g.jpg?size=512x512&quality=95&sign=e6dea8d381c634e21fae33be6958f89b&type=album',
+  ],
+  'очистить': [
+    'https://sun9-47.userapi.com/impg/JUV3wzs5a4Uvt_H4OrFw9pyanjZqN21uZrhjww/NBel8YiKQCE.jpg?size=940x529&quality=95&sign=3e474836170c7d1b28d337c371c51bc4&type=album',
+    'https://sun9-4.userapi.com/impg/SGI1ZNS4d8KrxNHZ_nLUXHOYucZU6jvhNeOgDg/TB2sPS0sYDU.jpg?size=631x408&quality=95&sign=f80d9d8df70e1595694719eae75f53b5&type=album',
+    'https://sun9-26.userapi.com/impg/v8z9857JqThOFOdXQl_mJLUhBrqXOdz6zh_kzQ/lq1Rvgk9FnQ.jpg?size=920x465&quality=95&sign=fe0e87e4d9cf94100c9e9feb09ce29e9&type=album',
+    'https://sun9-3.userapi.com/impg/WnSJb60k7-OIPepSmAfLy5KSYON1_iq_C4CAAQ/SlZHuUqj420.jpg?size=262x192&quality=95&sign=ba0f77e0cbb3d1628ede5d74949b0033&type=album',
   ],
   'шишка': [
     'https://sun9-58.userapi.com/impg/0RWw1NuhgBsxM9AG7AH6RrJt8eQdpH0KozEQXA/8Mxjir54KcA.jpg?size=564x705&quality=95&sign=2e71332fbfb65d41734a67a5f3195b8d&type=album',

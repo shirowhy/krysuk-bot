@@ -11,7 +11,46 @@ const vk = new VK({
 
 const { updates } = vk;
 
-const formatNameForCase = (name: string): string => {
+const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
+  'погладить': 'винительный',
+  'потрогать траву': 'именительный',
+  'обнять': 'винительный',
+  'поцеловать': 'винительный',
+  'засосать': 'винительный',
+  'укусить': 'винительный',
+  'лизнуть': 'винительный',
+  'херак': 'винительный',
+  'отмудохать': 'винительный',
+  'пятюня': 'дательный',
+  'пожать руку': 'дательный',
+  'закопать': 'винительный',
+  'жамк': 'родительный',
+  'съесть': 'винительный',
+  'откусить': 'дательный',
+  'аминь': 'дательный',
+  'очистить': 'родительный',
+  'обезвредить': 'винительный',
+  'шишка': 'именительный',
+};
+
+const formatNameForAccusativeCase = (name: string): string => {
+  const lastChar = name.slice(-1);
+  let formattedName = name;
+
+  switch (lastChar) {
+    case 'а':
+      formattedName = name.slice(0, -1) + 'у';
+      break;
+    case 'я':
+      formattedName = name.slice(0, -1) + 'ю';
+      break;
+    default:
+      formattedName = name;
+  }
+  return formattedName;
+};
+
+const formatNameForDativeCase = (name: string): string => {
   const lastChar = name.slice(-1);
   let formattedName = name;
 
@@ -21,7 +60,21 @@ const formatNameForCase = (name: string): string => {
       formattedName = name.slice(0, -1) + 'е';
       break;
   }
+  return formattedName;
+};
 
+const formatNameForGenitiveCase = (name: string): string => {
+  const lastChar = name.slice(-1);
+  let formattedName = name;
+
+  switch (lastChar) {
+    case 'а':
+      formattedName = name.slice(0, -1) + 'ы';
+      break;
+    case 'я':
+      formattedName = name.slice(0, -1) + 'и';
+      break;
+  }
   return formattedName;
 };
 
@@ -90,7 +143,17 @@ updates.on('message_new', async (context) => {
       const replyUserId = context.replyMessage.senderId;
       const replyUser = await vk.api.users.get({ user_ids: [replyUserId.toString()] });
       if (replyUser && replyUser.length > 0) {
-        targetUser = formatNameForCase(replyUser[0].first_name);
+        const name = replyUser[0].first_name;
+
+        if (commandCases[command] === 'дательный') {
+          targetUser = formatNameForDativeCase(name);
+        } else if (commandCases[command] === 'винительный') {
+          targetUser = formatNameForAccusativeCase(name);
+        } else if (commandCases[command] === 'родительный') {
+          targetUser = formatNameForGenitiveCase(name);
+        } else {
+          targetUser = name;
+        }
       }
     }
 
@@ -99,12 +162,8 @@ updates.on('message_new', async (context) => {
       await sendMessageWithAttachment('шишка', images);
       return;
     } else if (command === 'потрогать траву') {
-      const initiatorInfo = await vk.api.users.get({ user_ids: [context.senderId.toString()] });
-      const initiatorName = initiatorInfo[0].first_name;
-
-      const responseMessage = `${initiatorName} ${commands[command]}`;
       const images = commandImages[command];
-      await sendMessageWithAttachment(responseMessage, images);
+      await sendMessageWithAttachment('трогает траву, релаксирует', images);
       return;
     }
 
