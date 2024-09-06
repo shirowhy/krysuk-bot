@@ -13,14 +13,18 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
       throw new Error('OpenAI API key is not defined');
     }
 
-    const response = await axios.post('https://api.openai.com/v1/completions', {
-      prompt: `
-        You are a bot that participates in a chat. Below is the conversation context:
-        ${chatContext}
-        Respond to this message: "${messageText}"
-        Your response should be unique, in the same style, but add your own twist.
-      `,
-      model: 'text-davinci-003',
+    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      model: 'gpt-4',
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant.' },
+        {
+          role: 'user', content: `
+          Below is the conversation context:
+          ${chatContext}
+          Respond to this message: "${messageText}"
+          Your response should be unique, in the same style, but add your own twist.
+        ` }
+      ],
       max_tokens: 100,
     }, {
       headers: {
@@ -29,7 +33,7 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
       }
     });
 
-    return response.data.choices[0].text.trim();
+    return response.data.choices[0].message.content.trim();
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Failed to generate AI response:', error.response?.data || error.message);
