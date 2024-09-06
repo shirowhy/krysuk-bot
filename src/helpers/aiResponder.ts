@@ -7,14 +7,7 @@ import langs from 'langs';
 const MESSAGE_LOG_PATH = 'chat_messages.json';
 
 const preprocessText = (text: string): string => {
-  const cleanedText = text.replace(/[^а-яё\s]/gi, '');
-
-  const language = langs.where("1", "ru");
-  if (!language || cleanedText.length < 3) {
-    return '';
-  }
-
-  return cleanedText.trim();
+  return text.trim();
 };
 
 const generateAIResponse = async (messageText: string, chatContext: string): Promise<string | null> => {
@@ -85,7 +78,10 @@ export const handleAIResponse = async (context: MessageContext) => {
 
   const aiResponse = await generateAIResponse(context.text?.trim() || '', chatContext);
 
+  console.log('Generated AI response:', aiResponse);
   if (aiResponse) {
     await context.send(aiResponse);
+  } else {
+    console.log('AI did not generate a response.');
   }
 };
