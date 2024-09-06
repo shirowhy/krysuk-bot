@@ -2,8 +2,20 @@ import axios from 'axios';
 import fs from 'fs';
 import { MessageContext } from 'vk-io';
 import { getChatSettings } from '../config/config';
+import { franc } from 'franc';
 
 const MESSAGE_LOG_PATH = 'chat_messages.json';
+
+const preprocessText = (text: string): string => {
+  const cleanedText = text.replace(/[^а-яё\s]/gi, '');
+
+  const language = franc(cleanedText, { minLength: 3 });
+  if (language !== 'rus') {
+    return '';
+  }
+
+  return cleanedText.trim();
+};
 
 const generateAIResponse = async (messageText: string, chatContext: string): Promise<string | null> => {
   try {
@@ -13,19 +25,20 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
       throw new Error('OpenAI API key is not defined');
     }
 
+    const preprocessedText = preprocessText(messageText);
+
+    if (!preprocessedText) {
+      return null;
+    }
+
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4-turbo',
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
-        {
-          role: 'user', content: `
-          Below is the conversation context:
-          ${chatContext}
-          Respond to this message: "${messageText}"
-          Your response should be unique, in the same style, but add your own twist. The answers may be ridiculous or cheeky, but not offensive.
-        ` }
+        { role: 'system', content: 'You are a russian-speaking chat participant that responds naturally and in context to the ongoing conversation. Keep your responses brief, friendly, and relevant to the conversation. Consider the tone and topic of the chat.' },
+        { role: 'user', content: preprocessedText },
       ],
       max_tokens: 100,
+      temperature: 0.6,
     }, {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
