@@ -1,5 +1,4 @@
 import { db } from '../firebase';
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 
 interface ChatSettings {
   responseChance: number;
@@ -7,8 +6,9 @@ interface ChatSettings {
 
 export const getMessagesCountFromFirestore = async (): Promise<number> => {
   try {
-    const querySnapshot = await getDocs(collection(db, 'messages'));
-    return querySnapshot.size;
+    const messagesRef = db.collection('messages');
+    const snapshot = await messagesRef.get();
+    return snapshot.size;
   } catch (error) {
     console.error('Error getting messages count from Firestore:', error);
     return 0;
@@ -16,10 +16,10 @@ export const getMessagesCountFromFirestore = async (): Promise<number> => {
 };
 
 export const getChatSettings = async (chatId: number): Promise<ChatSettings> => {
-  const settingsRef = doc(db, 'chat_settings', chatId.toString());
-  const docSnap = await getDoc(settingsRef);
+  const settingsRef = db.collection('chat_settings').doc(chatId.toString());
+  const docSnap = await settingsRef.get();
 
-  if (docSnap.exists()) {
+  if (docSnap.exists) {
     return docSnap.data() as ChatSettings;
   } else {
     return { responseChance: 30 };
@@ -27,14 +27,14 @@ export const getChatSettings = async (chatId: number): Promise<ChatSettings> => 
 };
 
 export const updateChatSettings = async (chatId: number, newSettings: Partial<ChatSettings>): Promise<void> => {
-  const settingsRef = doc(db, 'chat_settings', chatId.toString());
+  const settingsRef = db.collection('chat_settings').doc(chatId.toString());
 
-  const docSnap = await getDoc(settingsRef);
-  if (docSnap.exists()) {
+  const docSnap = await settingsRef.get();
+  if (docSnap.exists) {
     const currentSettings = docSnap.data() as ChatSettings;
     const updatedSettings = { ...currentSettings, ...newSettings };
-    await setDoc(settingsRef, updatedSettings);
+    await settingsRef.set(updatedSettings, { merge: true });
   } else {
-    await setDoc(settingsRef, newSettings);
+    await settingsRef.set(newSettings);
   }
 };

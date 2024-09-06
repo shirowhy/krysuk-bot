@@ -3,19 +3,18 @@ import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
 import axios from 'axios';
 import { getMessagesCountFromFirestore } from './firebaseHelper';
-import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const saveResponseChance = async (chatId: string, chance: number) => {
-  const chatRef = doc(db, 'chats', chatId);
-  await setDoc(chatRef, { responseChance: chance }, { merge: true });
+  const chatRef = db.collection('chats').doc(chatId);
+  await chatRef.set({ responseChance: chance }, { merge: true });
 };
 
 const getResponseChance = async (chatId: string): Promise<number> => {
-  const chatRef = doc(db, 'chats', chatId);
-  const chatDoc = await getDoc(chatRef);
-  if (chatDoc.exists()) {
-    return chatDoc.data().responseChance || 30;
+  const chatRef = db.collection('chats').doc(chatId);
+  const chatDoc = await chatRef.get();
+  if (chatDoc.exists) {
+    return chatDoc.data()?.responseChance || 30;
   } else {
     return 30;
   }

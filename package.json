@@ -14,7 +14,7 @@
   "dependencies": {
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
-    "firebase": "^10.13.1",
+    "firebase-admin": "^12.4.0",
     "langs": "^2.0.0",
     "typescript": "^5.5.4",
     "vk-io": "^4.9.1"
