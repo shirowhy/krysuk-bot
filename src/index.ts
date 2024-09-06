@@ -13,7 +13,8 @@ const vk = new VK({
 const { updates } = vk;
 
 updates.on('message_new', async (context) => {
-  console.log('Received a new message...');
+  const messageText = context.text?.trim().toLowerCase();
+  console.log(`Received a new message: ${messageText}`);
 
   collectMessage(context);
   await saveMessageToFirestore({
@@ -25,8 +26,6 @@ updates.on('message_new', async (context) => {
   if (context.isOutbox) {
     return;
   }
-
-  const messageText = context.text?.trim().toLowerCase();
 
   if (!messageText) {
     return;
