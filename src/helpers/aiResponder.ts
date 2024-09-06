@@ -2,15 +2,15 @@ import axios from 'axios';
 import fs from 'fs';
 import { MessageContext } from 'vk-io';
 import { getChatSettings } from '../config/config';
+import langs from 'langs';
 
 const MESSAGE_LOG_PATH = 'chat_messages.json';
 
-const preprocessText = async (text: string): Promise<string> => {
+const preprocessText = (text: string): string => {
   const cleanedText = text.replace(/[^а-яё\s]/gi, '');
 
-  const { franc } = await import('franc');
-  const language = franc(cleanedText, { minLength: 3 });
-  if (language !== 'rus') {
+  const language = langs.where("1", "ru");
+  if (!language || cleanedText.length < 3) {
     return '';
   }
 
@@ -25,7 +25,7 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
       throw new Error('OpenAI API key is not defined');
     }
 
-    const preprocessedText = await preprocessText(messageText);
+    const preprocessedText = preprocessText(messageText);
 
     if (!preprocessedText) {
       return null;
