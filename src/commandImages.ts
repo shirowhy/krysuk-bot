@@ -145,4 +145,7 @@ export const commandImages: Record<Command, string[]> = {
     'https://sun9-68.userapi.com/impg/hsa3JYD6y62PF7WtXnY2JFTjfppyS3lttjY2rw/9ROLdaEQ5hU.jpg?size=564x564&quality=95&sign=17a59a86faad72de1937fa01f58c997d&type=album',
     'https://sun9-78.userapi.com/impf/daRBcq2SxmAqNvmXejXcIq1gZBxHoFm4MlqqVA/hZlt8vokrK4.jpg?size=86x130&quality=96&sign=edec034818494e9b0be5be9944840299&type=album',
   ],
+  'проверить шанс': [],
+  'установить шанс': [],
+  'глитч, че по интеллекту': [],
 };
