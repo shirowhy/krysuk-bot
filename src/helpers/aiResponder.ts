@@ -2,13 +2,13 @@ import axios from 'axios';
 import fs from 'fs';
 import { MessageContext } from 'vk-io';
 import { getChatSettings } from '../config/config';
-const franc = require('franc');
 
 const MESSAGE_LOG_PATH = 'chat_messages.json';
 
-const preprocessText = (text: string): string => {
+const preprocessText = async (text: string): Promise<string> => {
   const cleanedText = text.replace(/[^а-яё\s]/gi, '');
 
+  const { franc } = await import('franc');
   const language = franc(cleanedText, { minLength: 3 });
   if (language !== 'rus') {
     return '';
@@ -25,7 +25,7 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
       throw new Error('OpenAI API key is not defined');
     }
 
-    const preprocessedText = preprocessText(messageText);
+    const preprocessedText = await preprocessText(messageText);
 
     if (!preprocessedText) {
       return null;
@@ -34,7 +34,7 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
       model: 'gpt-4-turbo',
       messages: [
-        { role: 'system', content: 'You are a russian-speaking chat participant that responds naturally and in context to the ongoing conversation. Keep your responses brief, friendly, and relevant to the conversation. Consider the tone and topic of the chat: Genshin Impact, Zenless Zone Zero, memes' },
+        { role: 'system', content: 'You are a russian-speaking chat participant that responds naturally and in context to the ongoing conversation. Keep your responses brief, friendly, and relevant to the conversation. Consider the tone and topic of the chat: Genshin Impact, Zenless Zone Zero, anime, memes etc' },
         { role: 'user', content: chatContext },
         { role: 'user', content: preprocessedText },
       ],
