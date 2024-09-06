@@ -27,7 +27,7 @@ const commandCases: Record<Command, 'именительный' | 'винител
   'шишка': 'именительный',
   'проверить шанс': 'именительный',
   'установить шанс': 'именительный',
-  'Глитч, че по интеллекту': 'именительный',
+  'глитч, че по интеллекту': 'именительный',
 };
 
 const formatNameForCase = (name: string, caseType: 'именительный' | 'винительный' | 'дательный' | 'родительный'): string => {
@@ -106,14 +106,16 @@ export const handleCommand = async (
 
   const initiatorName = initiatorInfo[0].first_name;
 
-  if (command === 'Глитч, че по интеллекту') {
+  if (command === 'глитч, че по интеллекту') {
     const messageCount = await getMessagesCountFromFirestore();
+    console.log('Received command:', command);
     await context.send(`Я сохранил аж ${messageCount} сообщений из чата! Я крут? Определённо`);
     return;
   }
 
   if (command === 'проверить шанс') {
     const chatSettings = getChatSettings(chatId);
+    console.log('Received command:', command);
     const responseChance = chatSettings.responseChance || 30;
     await context.send(`Текущий шанс ответа бота: ${responseChance}%`);
     return;

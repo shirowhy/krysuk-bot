@@ -37,9 +37,11 @@ updates.on('message_new', async (context) => {
   if (messageText.toLowerCase().startsWith('установить шанс')) {
     command = 'установить шанс';
   } else if (messageText.toLowerCase().startsWith('проверить шанс')) {
+    console.log('Received command:', command);
     command = 'проверить шанс';
-  } else if (messageText.toLowerCase().startsWith('Глитч, че по интеллекту')) {
-    command = 'Глитч, че по интеллекту';
+  } else if (messageText.toLowerCase().startsWith('глитч, че по интеллекту')) {
+    console.log('Received command:', command);
+    command = 'глитч, че по интеллекту';
   } else {
     const parts = messageText.toLowerCase().split(' ');
     if (parts.length >= 2) {
