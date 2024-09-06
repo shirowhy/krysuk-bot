@@ -1,9 +1,25 @@
 import { MessageContext, PhotoAttachment, VK } from 'vk-io';
 import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
-import { getChatSettings, updateChatSettings } from '../config/config';
 import axios from 'axios';
 import { getMessagesCountFromFirestore } from './firebaseHelper';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+
+const saveResponseChance = async (chatId: string, chance: number) => {
+  const chatRef = doc(db, 'chats', chatId);
+  await setDoc(chatRef, { responseChance: chance }, { merge: true });
+};
+
+const getResponseChance = async (chatId: string): Promise<number> => {
+  const chatRef = doc(db, 'chats', chatId);
+  const chatDoc = await getDoc(chatRef);
+  if (chatDoc.exists()) {
+    return chatDoc.data().responseChance || 30;
+  } else {
+    return 30;
+  }
+};
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',
@@ -26,7 +42,7 @@ const commandCases: Record<Command, 'именительный' | 'винител
   'очистить': 'родительный',
   'шишка': 'именительный',
   'проверить шанс': 'именительный',
-  'установить шанс': 'именительный',
+  'установить шанс': 'винительный',
   'глитч, че по интеллекту': 'именительный',
 };
 
@@ -95,7 +111,7 @@ export const handleCommand = async (
   targetUser: string
 ) => {
   const chatId = context.chatId;
-  if (!chatId) {
+  if (typeof chatId === 'undefined') {
     console.warn('Chat ID is undefined, skipping command handling.');
     return;
   }
@@ -108,15 +124,12 @@ export const handleCommand = async (
 
   if (command === 'глитч, че по интеллекту') {
     const messageCount = await getMessagesCountFromFirestore();
-    console.log('Received command:', command);
-    await context.send(`Я сохранил аж ${messageCount} сообщений из чата! Я крут? Определённо`);
+    await context.send(`Я сохранил аж ${messageCount} сообщений из чата! Я крут? Определённо.`);
     return;
   }
 
   if (command === 'проверить шанс') {
-    const chatSettings = getChatSettings(chatId);
-    console.log('Received command:', command);
-    const responseChance = chatSettings.responseChance || 30;
+    const responseChance = await getResponseChance(chatId.toString());
     await context.send(`Текущий шанс ответа бота: ${responseChance}%`);
     return;
   }
@@ -127,7 +140,7 @@ export const handleCommand = async (
       await context.send(`Пожалуйста, укажите корректное значение шанса от 0 до 100.`);
       return;
     }
-    updateChatSettings(chatId, { responseChance: chanceValue });
+    await saveResponseChance(chatId.toString(), chanceValue);
     await context.send(`Шанс ответа бота установлен на: ${chanceValue}%`);
     return;
   }

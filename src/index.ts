@@ -26,7 +26,7 @@ updates.on('message_new', async (context) => {
     return;
   }
 
-  const messageText = context.text?.trim();
+  const messageText = context.text?.trim().toLowerCase();
 
   if (!messageText) {
     return;
@@ -34,16 +34,14 @@ updates.on('message_new', async (context) => {
 
   let command: Command | undefined;
 
-  if (messageText.toLowerCase().startsWith('установить шанс')) {
+  if (messageText.startsWith('установить шанс')) {
     command = 'установить шанс';
-  } else if (messageText.toLowerCase().startsWith('проверить шанс')) {
-    console.log('Received command:', command);
+  } else if (messageText.startsWith('проверить шанс')) {
     command = 'проверить шанс';
-  } else if (messageText.toLowerCase().startsWith('глитч, че по интеллекту')) {
-    console.log('Received command:', command);
+  } else if (messageText.startsWith('глитч, че по интеллекту')) {
     command = 'глитч, че по интеллекту';
   } else {
-    const parts = messageText.toLowerCase().split(' ');
+    const parts = messageText.split(' ');
     if (parts.length >= 2) {
       const possibleCommand = parts.slice(0, 2).join(' ') as Command;
       if (possibleCommand in commands) {
@@ -55,6 +53,8 @@ updates.on('message_new', async (context) => {
       command = parts[0] as Command;
     }
   }
+
+  console.log('Detected command:', command);
 
   if (command && command in commands) {
     const targetUser = messageText.slice(command.length).trim();
