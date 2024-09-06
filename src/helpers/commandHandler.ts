@@ -3,6 +3,9 @@ import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
 import { getChatSettings, updateChatSettings } from '../config/config';
 import axios from 'axios';
+import fs from 'fs';
+
+const MESSAGE_LOG_PATH = 'chat_messages.json';
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',
@@ -25,7 +28,8 @@ const commandCases: Record<Command, 'именительный' | 'винител
   'очистить': 'родительный',
   'шишка': 'именительный',
   'проверить шанс': 'именительный',
-  'установить шанс': 'винительный', // Новая команда
+  'установить шанс': 'именительный',
+  'Глитч, че по интеллекту': 'именительный',
 };
 
 const formatNameForCase = (name: string, caseType: 'именительный' | 'винительный' | 'дательный' | 'родительный'): string => {
@@ -119,6 +123,17 @@ export const handleCommand = async (
     }
     updateChatSettings(chatId, { responseChance: chanceValue });
     await context.send(`Шанс ответа бота установлен на: ${chanceValue}%`);
+    return;
+  }
+
+  if (command === 'Глитч, че по интеллекту') {
+    let messageCount = 0;
+    if (fs.existsSync(MESSAGE_LOG_PATH)) {
+      const rawData = fs.readFileSync(MESSAGE_LOG_PATH, 'utf8');
+      const messages = JSON.parse(rawData);
+      messageCount = messages.length;
+    }
+    await context.send(`Я сохранил аж ${messageCount} сообщений из чата! Я крут? Я крут`);
     return;
   }
 
