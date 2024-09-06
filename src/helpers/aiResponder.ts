@@ -43,7 +43,7 @@ export const handleAIResponse = async (context: MessageContext) => {
   const randomValue = Math.random() * 100;
 
   if (randomValue > responseChance) {
-    return; // Шанс не сработал, бот не отвечает
+    return;
   }
 
   let chatContext = '';

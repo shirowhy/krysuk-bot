@@ -1,8 +1,9 @@
 // src/controllers/commandHandler.ts
 
-import { MessageContext, VK } from 'vk-io';
+import { MessageContext, PhotoAttachment, VK } from 'vk-io';
 import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
+import axios from 'axios';
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',
@@ -111,8 +112,30 @@ export const handleCommand = async (
   const responseMessage = `${initiatorName} ${commands[command]} ${formattedTargetUser}`;
   const images = commandImages[command];
 
+  let attachment = '';
+  if (images && images.length > 0) {
+    const randomImageUrl = images[Math.floor(Math.random() * images.length)];
+
+    try {
+      const imageBuffer = (await axios.get(randomImageUrl, { responseType: 'arraybuffer' })).data;
+
+      const photo = await vk.upload.messagePhoto({
+        source: { value: imageBuffer, filename: 'image.jpg' }
+      });
+
+      if (photo instanceof PhotoAttachment) {
+        attachment = `photo${photo.ownerId}_${photo.id}`;
+        console.log(`Selected image ID: ${attachment}`);
+      } else {
+        console.error('Failed to get photo attachment');
+      }
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+    }
+  }
+
   await context.send({
     message: responseMessage,
-    attachment: images && images.length > 0 ? images[Math.floor(Math.random() * images.length)] : ''
+    attachment: attachment
   });
 };

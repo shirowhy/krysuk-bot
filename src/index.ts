@@ -1,5 +1,5 @@
 import { VK } from 'vk-io';
-import { config, updateChatSettings } from './config/config';
+import { config } from './config/config';
 import { handleCommand } from './helpers/commandHandler';
 import { handleAIResponse } from './helpers/aiResponder';
 import { commands, Command } from './commands';
@@ -12,8 +12,8 @@ const vk = new VK({
 const { updates } = vk;
 
 updates.on('message_new', async (context) => {
-  collectMessage(context);
   console.log('Received a new message...');
+  collectMessage(context);
 
   if (context.isOutbox) {
     return;
@@ -22,19 +22,6 @@ updates.on('message_new', async (context) => {
   const messageText = context.text?.trim();
 
   if (!messageText) {
-    return;
-  }
-
-  if (messageText.startsWith('!setChance')) {
-    const parts = messageText.split(' ');
-    const newChance = parseInt(parts[1], 10);
-
-    if (!isNaN(newChance) && newChance >= 0 && newChance <= 100) {
-      updateChatSettings(context.chatId!, { responseChance: newChance });
-      await context.send(`Шанс ответа установлен на ${newChance}%`);
-    } else {
-      await context.send('Пожалуйста, укажите корректный шанс (от 0 до 100).');
-    }
     return;
   }
 
