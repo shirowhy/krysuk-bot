@@ -22,7 +22,7 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
           Below is the conversation context:
           ${chatContext}
           Respond to this message: "${messageText}"
-          Your response should be unique, in the same style, but add your own twist.
+          Your response should be unique, in the same style, but add your own twist. The answers may be ridiculous or cheeky, but not offensive.
         ` }
       ],
       max_tokens: 100,

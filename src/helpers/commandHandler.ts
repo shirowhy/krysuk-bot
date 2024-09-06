@@ -1,9 +1,8 @@
-// src/controllers/commandHandler.ts
-
 import { MessageContext, PhotoAttachment, VK } from 'vk-io';
 import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
 import axios from 'axios';
+import { saveChatSettings } from '../config/config';
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',
@@ -138,4 +137,19 @@ export const handleCommand = async (
     message: responseMessage,
     attachment: attachment
   });
+};
+
+export const handleSetChanceCommand = async (context: MessageContext, vk: VK, parts: string[]) => {
+  if (parts[0] === 'установить' && parts[1] === 'шанс' && parts.length === 3) {
+    const newChance = parseInt(parts[2], 10);
+
+    if (!isNaN(newChance) && newChance >= 0 && newChance <= 100) {
+      saveChatSettings(context.chatId!, { responseChance: newChance });
+      await context.send(`Шанс ответа установлен на ${newChance}%`);
+    } else {
+      await context.send('Введите корректное значение для шанса (от 0 до 100).');
+    }
+    return true;
+  }
+  return false;
 };
