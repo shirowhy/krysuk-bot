@@ -1,12 +1,41 @@
 import axios from 'axios';
-import fs from 'fs';
 import { MessageContext } from 'vk-io';
 import { getChatSettings } from '../config/config';
+import { db } from '../firebase';
+import { collection, query, orderBy, limit, getDocs, addDoc } from 'firebase/firestore';
 
-const MESSAGE_LOG_PATH = 'chat_messages.json';
+interface Message {
+  text: string;
+  senderId: number;
+  date: string;
+}
 
 const preprocessText = (text: string): string => {
   return text.trim();
+};
+
+export const saveMessageToFirestore = async (messageData: any) => {
+  try {
+    const docRef = await addDoc(collection(db, "messages"), messageData);
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
+
+const getMessagesFromFirestore = async (limitNumber: number = 10): Promise<Message[]> => {
+  const messages: Message[] = [];
+  try {
+    const q = query(collection(db, "messages"), orderBy("date", "desc"), limit(limitNumber));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      messages.push(doc.data() as Message);
+    });
+  } catch (e) {
+    console.error("Error getting messages: ", e);
+  }
+  return messages;
 };
 
 const generateAIResponse = async (messageText: string, chatContext: string): Promise<string | null> => {
@@ -67,13 +96,8 @@ export const handleAIResponse = async (context: MessageContext) => {
     return;
   }
 
-  let chatContext = '';
-
-  if (fs.existsSync(MESSAGE_LOG_PATH)) {
-    const rawData = fs.readFileSync(MESSAGE_LOG_PATH, 'utf8');
-    const messages = JSON.parse(rawData);
-    chatContext = messages.map((msg: any) => `${msg.senderId}: ${msg.text}`).join('\n');
-  }
+  const previousMessages = await getMessagesFromFirestore(15);
+  const chatContext = previousMessages.map(msg => `${msg.senderId}: ${msg.text}`).join('\n');
 
   const aiResponse = await generateAIResponse(context.text?.trim() || '', chatContext);
 
@@ -83,4 +107,10 @@ export const handleAIResponse = async (context: MessageContext) => {
   } else {
     console.log('AI did not generate a response.');
   }
+
+  await saveMessageToFirestore({
+    text: context.text?.trim(),
+    senderId: context.senderId,
+    date: new Date().toISOString(),
+  });
 };

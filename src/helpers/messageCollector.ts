@@ -1,23 +1,18 @@
-import fs from 'fs';
 import { MessageContext } from 'vk-io';
+import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
-const MESSAGE_LOG_PATH = 'chat_messages.json';
-
-export const collectMessage = (context: MessageContext) => {
+export const collectMessage = async (context: MessageContext) => {
   const message = {
     text: context.text?.trim(),
     senderId: context.senderId,
     date: new Date().toISOString(),
   };
 
-  let messages = [];
-
-  if (fs.existsSync(MESSAGE_LOG_PATH)) {
-    const rawData = fs.readFileSync(MESSAGE_LOG_PATH, 'utf8');
-    messages = JSON.parse(rawData);
+  try {
+    const docRef = await addDoc(collection(db, "messages"), message);
+    console.log("Message saved with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error saving message: ", e);
   }
-
-  messages.push(message);
-
-  fs.writeFileSync(MESSAGE_LOG_PATH, JSON.stringify(messages, null, 2));
 };

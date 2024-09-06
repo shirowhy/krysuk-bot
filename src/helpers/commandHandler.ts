@@ -3,9 +3,7 @@ import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
 import { getChatSettings, updateChatSettings } from '../config/config';
 import axios from 'axios';
-import fs from 'fs';
-
-const MESSAGE_LOG_PATH = 'chat_messages.json';
+import { getMessagesCountFromFirestore } from './firebaseHelper';
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',
@@ -108,6 +106,12 @@ export const handleCommand = async (
 
   const initiatorName = initiatorInfo[0].first_name;
 
+  if (command === 'Глитч, че по интеллекту') {
+    const messageCount = await getMessagesCountFromFirestore();
+    await context.send(`Я сохранил аж ${messageCount} сообщений из чата! Я крут? Определённо`);
+    return;
+  }
+
   if (command === 'проверить шанс') {
     const chatSettings = getChatSettings(chatId);
     const responseChance = chatSettings.responseChance || 30;
@@ -123,17 +127,6 @@ export const handleCommand = async (
     }
     updateChatSettings(chatId, { responseChance: chanceValue });
     await context.send(`Шанс ответа бота установлен на: ${chanceValue}%`);
-    return;
-  }
-
-  if (command === 'Глитч, че по интеллекту') {
-    let messageCount = 0;
-    if (fs.existsSync(MESSAGE_LOG_PATH)) {
-      const rawData = fs.readFileSync(MESSAGE_LOG_PATH, 'utf8');
-      const messages = JSON.parse(rawData);
-      messageCount = messages.length;
-    }
-    await context.send(`Я сохранил аж ${messageCount} сообщений из чата! Я крут? Я крут`);
     return;
   }
 
