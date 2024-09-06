@@ -2,7 +2,6 @@ import axios from 'axios';
 import fs from 'fs';
 import { MessageContext } from 'vk-io';
 import { getChatSettings } from '../config/config';
-import langs from 'langs';
 
 const MESSAGE_LOG_PATH = 'chat_messages.json';
 
@@ -27,12 +26,12 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
       model: 'gpt-4-turbo',
       messages: [
-        { role: 'system', content: 'You are a russian-speaking chat participant that responds naturally and in context to the ongoing conversation. Keep your responses brief, friendly, and relevant to the conversation. Consider the tone and topic of the chat: Genshin Impact, Zenless Zone Zero, anime, memes etc' },
+        { role: 'system', content: 'Ты являешься участником чата, говорящим на русском языке. Твои ответы должны быть осмысленными, релевантными текущей беседе и максимально естественными. Всегда старайся поддерживать тему разговора и избегай шаблонных приветствий и вообще любых шаблонов. Подумайте о тоне и теме чата, например о Genshin Impact, Zenless Zone Zero, аниме, мемах и прочем. Но главное, просто отвечай в тему и по-живому, у тебя должна быть личность' },
         { role: 'user', content: chatContext },
         { role: 'user', content: preprocessedText },
       ],
       max_tokens: 100,
-      temperature: 0.6,
+      temperature: 0.5,
     }, {
       headers: {
         'Authorization': `Bearer ${apiKey}`,

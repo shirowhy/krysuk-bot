@@ -1,8 +1,8 @@
 import { MessageContext, PhotoAttachment, VK } from 'vk-io';
 import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
+import { getChatSettings, updateChatSettings } from '../config/config';
 import axios from 'axios';
-import { saveChatSettings } from '../config/config';
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',
@@ -24,6 +24,8 @@ const commandCases: Record<Command, 'именительный' | 'винител
   'обезвредить': 'винительный',
   'очистить': 'родительный',
   'шишка': 'именительный',
+  'проверить шанс': 'именительный',
+  'установить шанс': 'винительный', // Новая команда
 };
 
 const formatNameForCase = (name: string, caseType: 'именительный' | 'винительный' | 'дательный' | 'родительный'): string => {
@@ -90,11 +92,35 @@ export const handleCommand = async (
   command: Command,
   targetUser: string
 ) => {
+  const chatId = context.chatId;
+  if (!chatId) {
+    console.warn('Chat ID is undefined, skipping command handling.');
+    return;
+  }
+
   const initiatorInfo = await vk.api.users.get({
     user_ids: [context.senderId.toString()]
   });
 
   const initiatorName = initiatorInfo[0].first_name;
+
+  if (command === 'проверить шанс') {
+    const chatSettings = getChatSettings(chatId);
+    const responseChance = chatSettings.responseChance || 30;
+    await context.send(`Текущий шанс ответа бота: ${responseChance}%`);
+    return;
+  }
+
+  if (command === 'установить шанс') {
+    const chanceValue = parseInt(targetUser, 10);
+    if (isNaN(chanceValue) || chanceValue < 0 || chanceValue > 100) {
+      await context.send(`Пожалуйста, укажите корректное значение шанса от 0 до 100.`);
+      return;
+    }
+    updateChatSettings(chatId, { responseChance: chanceValue });
+    await context.send(`Шанс ответа бота установлен на: ${chanceValue}%`);
+    return;
+  }
 
   let formattedTargetUser = targetUser;
   if (context.replyMessage) {
@@ -137,19 +163,4 @@ export const handleCommand = async (
     message: responseMessage,
     attachment: attachment
   });
-};
-
-export const handleSetChanceCommand = async (context: MessageContext, vk: VK, parts: string[]) => {
-  if (parts[0] === 'установить' && parts[1] === 'шанс' && parts.length === 3) {
-    const newChance = parseInt(parts[2], 10);
-
-    if (!isNaN(newChance) && newChance >= 0 && newChance <= 100) {
-      saveChatSettings(context.chatId!, { responseChance: newChance });
-      await context.send(`Шанс ответа установлен на ${newChance}%`);
-    } else {
-      await context.send('Введите корректное значение для шанса (от 0 до 100).');
-    }
-    return true;
-  }
-  return false;
 };
