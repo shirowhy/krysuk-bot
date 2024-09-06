@@ -32,34 +32,44 @@ updates.on('message_new', async (context) => {
     return;
   }
 
-  let command: Command | undefined;
-
   if (messageText.startsWith('установить шанс')) {
-    command = 'установить шанс';
-  } else if (messageText.startsWith('проверить шанс')) {
-    command = 'проверить шанс';
-  } else if (messageText.startsWith('глитч, че по интеллекту')) {
-    command = 'глитч, че по интеллекту';
-  } else {
-    const parts = messageText.split(' ');
-    if (parts.length >= 2) {
-      const possibleCommand = parts.slice(0, 2).join(' ') as Command;
-      if (possibleCommand in commands) {
-        command = possibleCommand;
-      } else {
-        command = parts[0] as Command;
-      }
+    console.log('Detected command: установить шанс');
+    await handleCommand(context, vk, 'установить шанс', messageText.slice('установить шанс'.length).trim());
+    return;
+  }
+
+  if (messageText.startsWith('проверить шанс')) {
+    console.log('Detected command: проверить шанс');
+    await handleCommand(context, vk, 'проверить шанс', '');
+    return;
+  }
+
+  if (messageText.startsWith('глитч, че по интеллекту')) {
+    console.log('Detected command: глитч, че по интеллекту');
+    await handleCommand(context, vk, 'глитч, че по интеллекту', '');
+    return;
+  }
+
+  let command: Command | undefined;
+  const parts = messageText.split(' ');
+
+  if (parts.length >= 2) {
+    const possibleCommand = parts.slice(0, 2).join(' ') as Command;
+    if (possibleCommand in commands) {
+      command = possibleCommand;
     } else {
       command = parts[0] as Command;
     }
+  } else {
+    command = parts[0] as Command;
   }
 
-  console.log('Detected command:', command);
-
   if (command && command in commands) {
+    console.log('Detected command:', command);
     const targetUser = messageText.slice(command.length).trim();
     await handleCommand(context, vk, command, targetUser);
   } else {
+    console.log('No command detected, generating AI response...');
     await handleAIResponse(context);
   }
 });
