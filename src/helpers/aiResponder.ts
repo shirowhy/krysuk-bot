@@ -7,26 +7,37 @@ const MESSAGE_LOG_PATH = 'chat_messages.json';
 
 const generateAIResponse = async (messageText: string, chatContext: string): Promise<string | null> => {
   try {
-    const prompt = `
-      You are a bot that participates in a chat. Below is the conversation context:
-      ${chatContext}
-      Respond to this message: "${messageText}"
-      Your response should be unique, in the same style, but add your own twist.
-    `;
+    const apiKey = process.env.OPENAI_API_KEY;
+
+    if (!apiKey) {
+      throw new Error('OpenAI API key is not defined');
+    }
 
     const response = await axios.post('https://api.openai.com/v1/completions', {
-      prompt,
+      prompt: `
+        You are a bot that participates in a chat. Below is the conversation context:
+        ${chatContext}
+        Respond to this message: "${messageText}"
+        Your response should be unique, in the same style, but add your own twist.
+      `,
       model: 'text-davinci-003',
       max_tokens: 100,
     }, {
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
       }
     });
 
     return response.data.choices[0].text.trim();
   } catch (error) {
-    console.error('Failed to generate AI response:', error);
+    if (axios.isAxiosError(error)) {
+      console.error('Failed to generate AI response:', error.response?.data || error.message);
+    } else if (error instanceof Error) {
+      console.error('Failed to generate AI response:', error.message);
+    } else {
+      console.error('An unexpected error occurred:', error);
+    }
     return null;
   }
 };
