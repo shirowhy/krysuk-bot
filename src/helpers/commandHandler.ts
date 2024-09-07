@@ -14,9 +14,9 @@ const getResponseChance = async (chatId: string): Promise<number> => {
   const chatRef = db.collection('chats').doc(chatId);
   const chatDoc = await chatRef.get();
   if (chatDoc.exists) {
-    return chatDoc.data()?.responseChance || 30;
+    return chatDoc.data()?.responseChance || 5;
   } else {
-    return 30;
+    return 5;
   }
 };
 

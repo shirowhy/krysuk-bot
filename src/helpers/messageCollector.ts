@@ -9,9 +9,13 @@ export const collectMessage = async (context: MessageContext) => {
   };
 
   try {
-    const docRef = await db.collection("messages").add(message);
-    console.log("Message saved with ID: ", docRef.id);
+    const docRef = await db.collection('messages').add(message);
+    console.log('Message saved with ID:', docRef.id);
   } catch (e) {
-    console.error("Error saving message: ", e);
+    console.error('Error saving message:', e as Error);
+    const error = e as Error;
+    if (error.message.includes('NOT_FOUND')) {
+      console.error('Resource not found. Please ensure that the Firestore collection exists.');
+    }
   }
-};
+}  
