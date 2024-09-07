@@ -4,7 +4,6 @@ import { handleCommand } from './helpers/commandHandler';
 import { handleAIResponse } from './helpers/aiResponder';
 import { commands, Command } from './commands';
 import { collectMessage } from './helpers/messageCollector';
-import { saveMessageToFirestore } from './helpers/aiResponder';
 
 const vk = new VK({
   token: config.token
@@ -53,11 +52,6 @@ updates.on('message_new', async (context) => {
 
   if (messageText !== command) {
     collectMessage(context);
-    await saveMessageToFirestore({
-      text: context.text?.trim() || '',
-      senderId: context.senderId,
-      date: new Date().toISOString(),
-    });
   }
 
   if (parts.length >= 2) {

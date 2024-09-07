@@ -18,4 +18,4 @@ export const collectMessage = async (context: MessageContext) => {
       console.error('Resource not found. Please ensure that the Firestore collection exists.');
     }
   }
-}  
+};

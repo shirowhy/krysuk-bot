@@ -13,15 +13,6 @@ const preprocessText = (text: string): string => {
   return text.trim();
 };
 
-export const saveMessageToFirestore = async (messageData: any) => {
-  try {
-    const docRef = await db.collection("messages").add(messageData);
-    console.log("Document written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
-};
-
 const getMessagesFromFirestore = async (limitNumber: number = 10): Promise<Message[]> => {
   const messages: Message[] = [];
   try {
