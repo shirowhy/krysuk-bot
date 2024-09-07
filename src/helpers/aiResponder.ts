@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { MessageContext } from 'vk-io';
-import { getChatSettings } from '../config/config';
 import { db } from '../firebase';
+import { getResponseChance } from './firebaseHelper';
 
 interface Message {
   text: string;
@@ -81,14 +81,12 @@ export const handleAIResponse = async (context: MessageContext, isMentioned: boo
     return;
   }
 
-  const chatSettings = getChatSettings(chatId);
-  let responseChance = chatSettings.responseChance || 5;
+  let responseChance = await getResponseChance(chatId.toString());
+  const randomValue = Math.random() * 100;
 
   if (isMentioned) {
     responseChance = 100;
   }
-
-  const randomValue = Math.random() * 100;
 
   if (randomValue > responseChance) {
     console.log(`Random value: ${randomValue}, Response chance: ${responseChance} - No response.`);

@@ -15,6 +15,21 @@ export const getMessagesCountFromFirestore = async (): Promise<number> => {
   }
 };
 
+export const saveResponseChance = async (chatId: string, chance: number) => {
+  const chatRef = db.collection('chat_settings').doc(chatId);
+  await chatRef.set({ responseChance: chance }, { merge: true });
+};
+
+export const getResponseChance = async (chatId: string): Promise<number> => {
+  const chatRef = db.collection('chat_settings').doc(chatId);
+  const chatDoc = await chatRef.get();
+  if (chatDoc.exists) {
+    return chatDoc.data()?.responseChance || 5;
+  } else {
+    return 5;
+  }
+};
+
 export const getChatSettings = async (chatId: number): Promise<ChatSettings> => {
   const settingsRef = db.collection('chat_settings').doc(chatId.toString());
   const docSnap = await settingsRef.get();

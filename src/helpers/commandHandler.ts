@@ -2,28 +2,8 @@ import { MessageContext, PhotoAttachment, VK } from 'vk-io';
 import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
 import axios from 'axios';
-import { getMessagesCountFromFirestore } from './firebaseHelper';
+import { getMessagesCountFromFirestore, getResponseChance, saveResponseChance } from './firebaseHelper';
 import { db } from '../firebase';
-
-const saveResponseChance = async (chatId: string, chance: number) => {
-  try {
-    const chatRef = db.collection('chats').doc(chatId);
-    await chatRef.set({ responseChance: chance }, { merge: true });
-    console.log(`Response chance for chat ${chatId} set to: ${chance}`);
-  } catch (error) {
-    console.error('Error setting response chance:', error);
-  }
-};
-
-const getResponseChance = async (chatId: string): Promise<number> => {
-  const chatRef = db.collection('chats').doc(chatId);
-  const chatDoc = await chatRef.get();
-  if (chatDoc.exists) {
-    return chatDoc.data()?.responseChance || 5;
-  } else {
-    return 5;
-  }
-};
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',
