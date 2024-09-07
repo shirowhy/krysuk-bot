@@ -88,8 +88,15 @@ export const handleAIResponse = async (context: MessageContext) => {
   }
 
   const chatSettings = getChatSettings(chatId);
-  const responseChance = chatSettings.responseChance || 30;
+  const responseChance = chatSettings.responseChance || 5;
   const randomValue = Math.random() * 100;
+
+  if (randomValue > responseChance) {
+    console.log(`Random value: ${randomValue}, Response chance: ${responseChance} - No response.`);
+    return;
+  } else {
+    console.log(`Random value: ${randomValue}, Response chance: ${responseChance} - Responding.`);
+  }
 
   if (randomValue > responseChance) {
     return;
@@ -106,10 +113,4 @@ export const handleAIResponse = async (context: MessageContext) => {
   } else {
     console.log('AI did not generate a response.');
   }
-
-  await saveMessageToFirestore({
-    text: context.text?.trim(),
-    senderId: context.senderId,
-    date: new Date().toISOString(),
-  });
 };

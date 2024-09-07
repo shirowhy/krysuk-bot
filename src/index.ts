@@ -16,13 +16,6 @@ updates.on('message_new', async (context) => {
   const messageText = context.text?.trim().toLowerCase();
   console.log(`Received a new message: ${messageText}`);
 
-  collectMessage(context);
-  await saveMessageToFirestore({
-    text: context.text?.trim() || '',
-    senderId: context.senderId,
-    date: new Date().toISOString(),
-  });
-
   if (context.isOutbox) {
     return;
   }
@@ -49,8 +42,23 @@ updates.on('message_new', async (context) => {
     return;
   }
 
+  if (messageText.startsWith('крысюк') || messageText.startsWith('глитч') || messageText.startsWith('крыс')) {
+    console.log('Bot was mentioned, generating AI response...');
+    await handleAIResponse(context);
+    return;
+  }
+
   let command: Command | undefined;
   const parts = messageText.split(' ');
+
+  if (messageText !== command) {
+    collectMessage(context);
+    await saveMessageToFirestore({
+      text: context.text?.trim() || '',
+      senderId: context.senderId,
+      date: new Date().toISOString(),
+    });
+  }
 
   if (parts.length >= 2) {
     const possibleCommand = parts.slice(0, 2).join(' ') as Command;
