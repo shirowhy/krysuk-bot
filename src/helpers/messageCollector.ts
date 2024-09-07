@@ -2,10 +2,17 @@ import { MessageContext } from 'vk-io';
 import { db } from '../firebase';
 
 export const collectMessage = async (context: MessageContext) => {
+  const chatId = context.chatId?.toString();
+  if (!chatId) {
+    console.warn('Chat ID is undefined, skipping message collection.');
+    return;
+  }
+
   const message = {
     text: context.text?.trim(),
     senderId: context.senderId,
     date: new Date().toISOString(),
+    chatId: chatId,
   };
 
   try {

@@ -6,8 +6,13 @@ import { getMessagesCountFromFirestore } from './firebaseHelper';
 import { db } from '../firebase';
 
 const saveResponseChance = async (chatId: string, chance: number) => {
-  const chatRef = db.collection('chats').doc(chatId);
-  await chatRef.set({ responseChance: chance }, { merge: true });
+  try {
+    const chatRef = db.collection('chats').doc(chatId);
+    await chatRef.set({ responseChance: chance }, { merge: true });
+    console.log(`Response chance for chat ${chatId} set to: ${chance}`);
+  } catch (error) {
+    console.error('Error setting response chance:', error);
+  }
 };
 
 const getResponseChance = async (chatId: string): Promise<number> => {
@@ -109,8 +114,8 @@ export const handleCommand = async (
   command: Command,
   targetUser: string
 ) => {
-  const chatId = context.chatId;
-  if (typeof chatId === 'undefined') {
+  const chatId = context.chatId?.toString();
+  if (!chatId) {
     console.warn('Chat ID is undefined, skipping command handling.');
     return;
   }

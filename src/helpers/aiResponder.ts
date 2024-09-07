@@ -13,10 +13,13 @@ const preprocessText = (text: string): string => {
   return text.trim();
 };
 
-const getMessagesFromFirestore = async (limitNumber: number = 10): Promise<Message[]> => {
+const getMessagesFromFirestore = async (chatId: string, limitNumber: number = 10): Promise<Message[]> => {
   const messages: Message[] = [];
   try {
-    const q = db.collection("messages").orderBy("date", "desc").limit(limitNumber);
+    const q = db.collection("messages")
+      .where("chatId", "==", chatId)
+      .orderBy("date", "desc")
+      .limit(limitNumber);
     const querySnapshot = await q.get();
 
     querySnapshot.forEach((doc) => {
@@ -71,7 +74,7 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
   }
 };
 
-export const handleAIResponse = async (context: MessageContext) => {
+export const handleAIResponse = async (context: MessageContext, isMentioned: boolean = false) => {
   const chatId = context.chatId;
   if (!chatId) {
     console.warn('Chat ID is undefined, skipping AI response.');
@@ -79,7 +82,12 @@ export const handleAIResponse = async (context: MessageContext) => {
   }
 
   const chatSettings = getChatSettings(chatId);
-  const responseChance = chatSettings.responseChance || 5;
+  let responseChance = chatSettings.responseChance || 5;
+
+  if (isMentioned) {
+    responseChance = 100;
+  }
+
   const randomValue = Math.random() * 100;
 
   if (randomValue > responseChance) {
@@ -93,7 +101,7 @@ export const handleAIResponse = async (context: MessageContext) => {
     return;
   }
 
-  const previousMessages = await getMessagesFromFirestore(15);
+  const previousMessages = await getMessagesFromFirestore(chatId.toString(), 15);
   const chatContext = previousMessages.map(msg => `${msg.senderId}: ${msg.text}`).join('\n');
 
   const aiResponse = await generateAIResponse(context.text?.trim() || '', chatContext);

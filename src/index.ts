@@ -43,7 +43,7 @@ updates.on('message_new', async (context) => {
 
   if (messageText.startsWith('крысюк') || messageText.startsWith('глитч') || messageText.startsWith('крыс')) {
     console.log('Bot was mentioned, generating AI response...');
-    await handleAIResponse(context);
+    await handleAIResponse(context, true);
     return;
   }
 
