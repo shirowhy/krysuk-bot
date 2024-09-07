@@ -13,7 +13,8 @@ const { updates } = vk;
 
 updates.on('message_new', async (context) => {
   const messageText = context.text?.trim().toLowerCase();
-  console.log(`Received a new message: ${messageText}`);
+  const chatId = context.chatId;
+  console.log(`Received a new message: ${messageText} in chat with ID: ${chatId}`);
 
   if (context.isOutbox) {
     return;
