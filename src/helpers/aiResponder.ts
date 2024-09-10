@@ -52,7 +52,7 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
         { role: 'user', content: chatContext },
         { role: 'user', content: preprocessedText },
       ],
-      max_tokens: 100,
+      max_tokens: 300,
       temperature: 0.5,
     }, {
       headers: {

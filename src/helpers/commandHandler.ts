@@ -3,7 +3,6 @@ import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
 import axios from 'axios';
 import { getMessagesCountFromFirestore, getResponseChance, saveResponseChance } from './firebaseHelper';
-import { db } from '../firebase';
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',

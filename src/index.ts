@@ -23,6 +23,9 @@ updates.on('message_new', async (context) => {
     return;
   }
 
+  let command: Command | undefined;
+  const parts = messageText.split(' ');
+
   if (messageText.startsWith('установить шанс')) {
     console.log('Detected command: установить шанс');
     await handleCommand(context, vk, 'установить шанс', messageText.slice('установить шанс'.length).trim());
@@ -41,14 +44,17 @@ updates.on('message_new', async (context) => {
     return;
   }
 
+  if (command === 'шишка') {
+    console.log('Detected command: шишка');
+    await handleCommand(context, vk, 'шишка', '');
+    return;
+  }
+
   if (messageText.startsWith('крысюк') || messageText.startsWith('глитч') || messageText.startsWith('крыс')) {
     console.log('Bot was mentioned, generating AI response...');
     await handleAIResponse(context, true);
     return;
   }
-
-  let command: Command | undefined;
-  const parts = messageText.split(' ');
 
   if (messageText !== command) {
     collectMessage(context);

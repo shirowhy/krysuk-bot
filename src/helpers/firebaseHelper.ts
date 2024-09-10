@@ -37,7 +37,7 @@ export const getChatSettings = async (chatId: number): Promise<ChatSettings> => 
   if (docSnap.exists) {
     return docSnap.data() as ChatSettings;
   } else {
-    return { responseChance: 30 };
+    return { responseChance: 5 };
   }
 };
 
