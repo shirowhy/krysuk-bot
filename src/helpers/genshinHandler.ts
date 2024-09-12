@@ -22,9 +22,9 @@ export const handleGenshinIdentityCommand = async (context: MessageContext, vk: 
     return;
   }
 
-  const adjectivesDoc = await db.collection('phrase_lists_gensh').doc('adjectives').get();
-  const subjectsDoc = await db.collection('phrase_lists_gensh').doc('subjects').get();
-  const actionsDoc = await db.collection('phrase_lists_gensh').doc('actions').get();
+  const adjectivesDoc = await db.collection('phrase_lists_gensh').doc('adjective').get();
+  const subjectsDoc = await db.collection('phrase_lists_gensh').doc('subject').get();
+  const actionsDoc = await db.collection('phrase_lists_gensh').doc('action').get();
 
   if (!adjectivesDoc.exists || !subjectsDoc.exists || !actionsDoc.exists) {
     console.error('One or more documents are missing from Firestore.');
