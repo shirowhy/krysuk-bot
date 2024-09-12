@@ -74,7 +74,7 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
   }
 };
 
-export const handleAIResponse = async (context: MessageContext, isMentioned: boolean = false) => {
+export const handleAIResponse = async (context: MessageContext, forceResponse = false) => {
   const chatId = context.chatId;
   if (!chatId) {
     console.warn('Chat ID is undefined, skipping AI response.');
@@ -82,11 +82,12 @@ export const handleAIResponse = async (context: MessageContext, isMentioned: boo
   }
 
   let responseChance = await getResponseChance(chatId.toString());
-  const randomValue = Math.random() * 100;
 
-  if (isMentioned) {
+  if (forceResponse) {
     responseChance = 100;
   }
+
+  const randomValue = Math.random() * 100;
 
   if (randomValue > responseChance) {
     console.log(`Random value: ${randomValue}, Response chance: ${responseChance} - No response.`);
