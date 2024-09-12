@@ -4,7 +4,7 @@ import { handleCommand } from './helpers/commandHandler';
 import { handleAIResponse } from './helpers/aiResponder';
 import { commands, Command } from './commands';
 import { collectMessage } from './helpers/messageCollector';
-import { handleIdentityCommand } from './helpers/genshinHandler';
+import { handleIdentityCommand } from './helpers/identityHandler';
 
 const vk = new VK({
   token: config.token
@@ -27,8 +27,8 @@ updates.on('message_new', async (context) => {
   let command: Command | undefined;
   const parts = messageText.split(' ');
 
-  if (messageText.startsWith('глитч кто я генш')) {
-    console.log('Detected command: глитч кто я генш');
+  if (messageText.startsWith('глитч кто я')) {
+    console.log('Detected command: глитч кто я');
     await handleIdentityCommand(context, vk);
     return;
   }
