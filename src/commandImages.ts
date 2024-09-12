@@ -75,6 +75,7 @@ export const commandImages: Record<Command, string[]> = {
     'https://sun9-57.userapi.com/impg/hIyuOJqXHhBeYoUoElghluuNgcl6tQ_w8zGMrg/SmxDg7TP_Ww.jpg?size=643x634&quality=96&sign=6116730ddac7b2d3c51b6d1e7f6bdf83&type=album',
     'https://sun9-50.userapi.com/impg/d1_d6SWg3_AVd_WAUx0Q1WiTEqgQ6-UXCbSjcw/hF0fg7__pMQ.jpg?size=583x567&quality=96&sign=ec32cbb387695abd5b5406db95657130&type=album',
     'https://sun9-43.userapi.com/impg/BzjIpTyHJ5w5VfH0_gC8Y68d7fYjDUvPmrGYZg/T9Sb8d6VJkY.jpg?size=774x640&quality=96&sign=724b76bbd4376fd565559cee44e351bb&type=album',
+    'https://sun9-12.userapi.com/impg/qMo8DMSREHCBYHw5webuPp2YlZQO_ENbb3-HJg/qRfGIPRF4gQ.jpg?size=960x652&quality=95&sign=290cefde7d17de745e018c9e8995abaf&type=album'
   ],
   'отмудохать': [
   ],

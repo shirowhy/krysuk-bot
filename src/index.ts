@@ -4,7 +4,7 @@ import { handleCommand } from './helpers/commandHandler';
 import { handleAIResponse } from './helpers/aiResponder';
 import { commands, Command } from './commands';
 import { collectMessage } from './helpers/messageCollector';
-import { handleGenshinIdentityCommand } from './helpers/genshinHandler';
+import { handleIdentityCommand } from './helpers/genshinHandler';
 
 const vk = new VK({
   token: config.token
@@ -29,7 +29,7 @@ updates.on('message_new', async (context) => {
 
   if (messageText.startsWith('глитч кто я генш')) {
     console.log('Detected command: глитч кто я генш');
-    await handleGenshinIdentityCommand(context, vk);
+    await handleIdentityCommand(context, vk);
     return;
   }
 

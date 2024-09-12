@@ -1,12 +1,17 @@
 import { MessageContext, VK } from 'vk-io';
 import { db } from '../firebase';
-import { handleAIResponse } from './aiResponder';
 import { DateTime } from 'luxon';
 
-export const handleGenshinIdentityCommand = async (context: MessageContext, vk: VK) => {
+const fandomMapping: Record<string, string> = {
+  'генш': 'gensh',
+  'титосы': 'AOT',
+  'ззз': 'zzz'
+};
+
+export const handleIdentityCommand = async (context: MessageContext, vk: VK) => {
   const chatId = context.chatId?.toString();
   if (!chatId) {
-    console.warn('Chat ID is undefined, skipping Genshin identity response.');
+    console.warn('Chat ID is undefined, skipping identity response.');
     return;
   }
 
@@ -20,13 +25,23 @@ export const handleGenshinIdentityCommand = async (context: MessageContext, vk: 
   const nowInMoscow = DateTime.now().setZone('Europe/Moscow');
   const todayDate = nowInMoscow.toISODate();
 
-  const userDocRef = db.collection('genshin_identity_logs').doc(initiatorId);
+  const messageText = context.text?.trim().toLowerCase();
+  const commandParts = messageText?.split(' ');
+  const fandom = commandParts?.[3];
+
+  if (!fandom || !(fandom in fandomMapping)) {
+    await context.send('Это чё? Такого фэндома нет. Попробуй "Глитч кто я генш", "Глитч кто я титосы" или "Глитч кто я ззз"');
+    return;
+  }
+
+  const collectionName = fandomMapping[fandom];
+  const userDocRef = db.collection(`${collectionName}_identity_logs`).doc(initiatorId);
   const userDoc = await userDocRef.get();
 
   if (userDoc.exists) {
     const userData = userDoc.data();
-    const lastGeneratedDate = userData?.lastGeneratedDate;
-    const lastResponse = userData?.lastResponse;
+    const lastGeneratedDate = userData?.[`${collectionName}_lastGeneratedDate`];
+    const lastResponse = userData?.[`${collectionName}_lastResponse`];
 
     if (lastGeneratedDate === todayDate) {
       await context.send(lastResponse);
@@ -34,17 +49,9 @@ export const handleGenshinIdentityCommand = async (context: MessageContext, vk: 
     }
   }
 
-  const randomValue = Math.random() * 100;
-  if (randomValue < 0) {
-    console.log('Generating AI gensh response instead of fixed response...');
-    const aiResponseTemplate = `${initiatorName}, ты —`;
-    await handleAIResponse(context, true, aiResponseTemplate);
-    return;
-  }
-
-  const adjectivesDoc = await db.collection('phrase_lists_gensh').doc('adjectives').get();
-  const subjectsDoc = await db.collection('phrase_lists_gensh').doc('subjects').get();
-  const actionsDoc = await db.collection('phrase_lists_gensh').doc('actions').get();
+  const adjectivesDoc = await db.collection(`phrase_lists_${collectionName}`).doc('adjectives').get();
+  const subjectsDoc = await db.collection(`phrase_lists_${collectionName}`).doc('subjects').get();
+  const actionsDoc = await db.collection(`phrase_lists_${collectionName}`).doc('actions').get();
 
   if (!adjectivesDoc.exists || !subjectsDoc.exists || !actionsDoc.exists) {
     console.error('One or more documents are missing from Firestore.');
@@ -69,8 +76,8 @@ export const handleGenshinIdentityCommand = async (context: MessageContext, vk: 
   const response = `${initiatorName}, ты — ${randomAdjective[`adjective-name-${gender}`]} ${randomSubject.name} ${actionText}`;
 
   await userDocRef.set({
-    lastGeneratedDate: todayDate,
-    lastResponse: response,
+    [`${collectionName}_lastGeneratedDate`]: todayDate,
+    [`${collectionName}_lastResponse`]: response,
   });
 
   await context.send(response);

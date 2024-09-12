@@ -2,6 +2,7 @@ import axios from 'axios';
 import { MessageContext } from 'vk-io';
 import { db } from '../firebase';
 import { getResponseChance } from './firebaseHelper';
+import aiSettings from '../aiSettings.json';
 
 interface Message {
   text: string;
@@ -48,12 +49,12 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
       model: 'gpt-4-turbo',
       messages: [
-        { role: 'system', content: 'Ты являешься участником чата, говорящим на русском языке. Тебя зовут Глитч или Крысюк. Могут называть просто крыс, это тоже будет про тебя. Твои ответы должны быть осмысленными, релевантными текущей беседе и максимально естественными. Всегда старайся поддерживать тему разговора и избегай шаблонных приветствий и вообще любых шаблонов, вообще не пиши "Привет"! Подумайте о тоне и теме чата, у тебя должна быть относительно дерзкая и смелая личность' },
+        { role: 'system', content: aiSettings.systemMessage },
         { role: 'user', content: chatContext },
         { role: 'user', content: preprocessedText },
       ],
-      max_tokens: 300,
-      temperature: 0.5,
+      max_tokens: aiSettings.maxTokens,
+      temperature: aiSettings.temperature,
     }, {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
