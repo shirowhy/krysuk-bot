@@ -16,10 +16,12 @@
     "dotenv": "^16.4.5",
     "firebase-admin": "^12.4.0",
     "langs": "^2.0.0",
+    "luxon": "^3.5.0",
     "typescript": "^5.5.4",
     "vk-io": "^4.9.1"
   },
   "devDependencies": {
+    "@types/luxon": "^3.4.2",
     "@types/node": "^22.5.2"
   }
 }

@@ -1,6 +1,7 @@
 import { MessageContext, VK } from 'vk-io';
 import { db } from '../firebase';
 import { handleAIResponse } from './aiResponder';
+import { DateTime } from 'luxon';
 
 export const handleGenshinIdentityCommand = async (context: MessageContext, vk: VK) => {
   const chatId = context.chatId?.toString();
@@ -13,7 +14,25 @@ export const handleGenshinIdentityCommand = async (context: MessageContext, vk: 
     user_ids: [context.senderId.toString()]
   });
 
+  const initiatorId = context.senderId.toString();
   const initiatorName = initiatorInfo[0].first_name;
+
+  const nowInMoscow = DateTime.now().setZone('Europe/Moscow');
+  const todayDate = nowInMoscow.toISODate();
+
+  const userDocRef = db.collection('genshin_identity_logs').doc(initiatorId);
+  const userDoc = await userDocRef.get();
+
+  if (userDoc.exists) {
+    const userData = userDoc.data();
+    const lastGeneratedDate = userData?.lastGeneratedDate;
+    const lastResponse = userData?.lastResponse;
+
+    if (lastGeneratedDate === todayDate) {
+      await context.send(lastResponse);
+      return;
+    }
+  }
 
   const randomValue = Math.random() * 100;
   if (randomValue < 0) {
@@ -48,6 +67,11 @@ export const handleGenshinIdentityCommand = async (context: MessageContext, vk: 
     : randomAction['action-name-male'];
 
   const response = `${initiatorName}, ты — ${randomAdjective[`adjective-name-${gender}`]} ${randomSubject.name} ${actionText}`;
+
+  await userDocRef.set({
+    lastGeneratedDate: todayDate,
+    lastResponse: response,
+  });
 
   await context.send(response);
 };
