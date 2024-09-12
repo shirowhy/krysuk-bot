@@ -32,17 +32,21 @@ export const handleGenshinIdentityCommand = async (context: MessageContext, vk: 
     return;
   }
 
-  const adjectives = adjectivesDoc.data()?.list || [];
-  const subjects = subjectsDoc.data()?.list || [];
-  const actions = actionsDoc.data()?.list || [];
+  const adjectives = adjectivesDoc.data()?.data?.adjectives || [];
+  const subjects = subjectsDoc.data()?.data?.subjects || [];
+  const actions = actionsDoc.data()?.data?.actions || [];
 
   const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
   const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
-  const randomAction = actions[Math.floor(Math.random() * actions.length)];
 
   const gender = randomSubject.gender === 'female' ? 'female' : 'male';
 
-  const response = `${initiatorName}, ты — ${randomAdjective[`adjective-name-${gender}`]} ${randomSubject.name} ${randomAction[`action-name-${gender}`]}`;
+  const randomAction = actions[Math.floor(Math.random() * actions.length)];
+  const actionText = gender === 'female'
+    ? randomAction['action-name-female']
+    : randomAction['action-name-male'];
+
+  const response = `${initiatorName}, ты — ${randomAdjective[`adjective-name-${gender}`]} ${randomSubject.name} ${actionText}`;
 
   await context.send(response);
 };
