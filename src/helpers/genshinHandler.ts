@@ -18,7 +18,8 @@ export const handleGenshinIdentityCommand = async (context: MessageContext, vk: 
   const randomValue = Math.random() * 100;
   if (randomValue < 25) {
     console.log('Generating AI gensh response instead of fixed response...');
-    await handleAIResponse(context, true);
+    const aiResponseTemplate = `${initiatorName}, ты —`;
+    await handleAIResponse(context, true, aiResponseTemplate);
     return;
   }
 

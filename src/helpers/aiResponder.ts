@@ -74,7 +74,7 @@ const generateAIResponse = async (messageText: string, chatContext: string): Pro
   }
 };
 
-export const handleAIResponse = async (context: MessageContext, forceResponse = false) => {
+export const handleAIResponse = async (context: MessageContext, forceResponse = false, responseTemplate?: string) => {
   const chatId = context.chatId;
   if (!chatId) {
     console.warn('Chat ID is undefined, skipping AI response.');
@@ -107,7 +107,8 @@ export const handleAIResponse = async (context: MessageContext, forceResponse = 
 
   console.log('Generated AI response:', aiResponse);
   if (aiResponse) {
-    await context.send(aiResponse);
+    const finalResponse = responseTemplate ? `${responseTemplate} ${aiResponse}` : aiResponse;
+    await context.send(finalResponse);
   } else {
     console.log('AI did not generate a response.');
   }
