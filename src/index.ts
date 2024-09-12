@@ -44,12 +44,6 @@ updates.on('message_new', async (context) => {
     return;
   }
 
-  if (command === 'шишка') {
-    console.log('Detected command: шишка');
-    await handleCommand(context, vk, 'шишка', '');
-    return;
-  }
-
   if (messageText.startsWith('крысюк') || messageText.startsWith('глитч') || messageText.startsWith('крыс')) {
     console.log('Bot was mentioned, generating AI response...');
     await handleAIResponse(context, true);

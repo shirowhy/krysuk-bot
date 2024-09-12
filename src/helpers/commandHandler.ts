@@ -128,6 +128,11 @@ export const handleCommand = async (
     return;
   }
 
+  if (command === 'шишка') {
+    await context.send('шишка');
+    return;
+  }
+
   let formattedTargetUser = targetUser;
   if (context.replyMessage) {
     const replyUserId = context.replyMessage.senderId;
