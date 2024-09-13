@@ -83,7 +83,6 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
 
     const attachment = `photo${photo.ownerId}_${photo.id}`;
     await context.send({
-      message: 'Вот твой мем!',
       attachment: attachment
     });
 
