@@ -1,11 +1,9 @@
-import { createCanvas, loadImage } from 'canvas';
 import axios from 'axios';
-import { MessageContext, VK } from 'vk-io';
-import FormData from 'form-data';
-import { memeTemplates } from '../memeTemplates';
+import { MessageContext } from 'vk-io';
 import { getMessagesFromFirestore } from './aiResponder';
+import { memeTemplates } from '../memeTemplates';
 
-export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
+export const handleMemeCommand = async (context: MessageContext) => {
   try {
     const chatId = context.chatId?.toString();
     if (!chatId) {
@@ -14,60 +12,31 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
     }
 
     const messages = await getMessagesFromFirestore(chatId, 10);
-
     const randomMessages = messages.map(msg => msg.text);
     const memeText = randomMessages.join(' ').substring(0, 100);
 
-    if (!memeText) {
-      await context.send('Не удалось сгенерировать текст для мема.');
-      return;
-    }
-
     const randomTemplate = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
 
-    const image = await loadImage(randomTemplate);
-    const canvas = createCanvas(image.width, image.height);
-    const ctx = canvas.getContext('2d');
+    let memeUrl;
+    if (randomTemplate.startsWith('http')) {
+      memeUrl = `https://api.memegen.link/images/custom/${encodeURIComponent(memeText)}.jpg?background=${encodeURIComponent(randomTemplate)}`;
+    } else {
+      memeUrl = `https://api.memegen.link/images/${randomTemplate}/${encodeURIComponent(memeText)}.jpg`;
+    }
 
-    ctx.drawImage(image, 0, 0, image.width, image.height);
+    const response = await axios.get(memeUrl, { responseType: 'arraybuffer' });
+    const imageBuffer = Buffer.from(response.data, 'binary');
 
-    ctx.font = '32px sans-serif';
-    ctx.fillStyle = 'white';
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 2;
-
-    const textX = 20;
-    const textY = image.height - 40;
-    ctx.strokeText(memeText, textX, textY);
-    ctx.fillText(memeText, textX, textY);
-
-    const buffer = canvas.toBuffer('image/jpeg');
-
-    const uploadServer = await vk.api.photos.getMessagesUploadServer({
-      peer_id: context.peerId,
-    });
-
-    const formData = new FormData();
-    formData.append('photo', buffer, {
+    const photo = await context.uploadPhoto({
+      source: imageBuffer,
       filename: 'meme.jpg',
-      contentType: 'image/jpeg',
-    });
-
-    const uploadResponse = await axios.post(uploadServer.upload_url, formData, {
-      headers: formData.getHeaders(),
-    });
-
-    const { photo, server, hash } = uploadResponse.data;
-
-    const savedPhoto = await vk.api.photos.saveMessagesPhoto({
-      photo,
-      server,
-      hash,
     });
 
     await context.send({
-      attachment: `photo${savedPhoto[0].owner_id}_${savedPhoto[0].id}`,
+      message: 'Вот ваш мем!',
+      attachment: `photo${photo.ownerId}_${photo.id}`
     });
+
   } catch (error) {
     console.error('Failed to generate meme:', error);
     await context.send('Произошла ошибка при генерации мема.');
