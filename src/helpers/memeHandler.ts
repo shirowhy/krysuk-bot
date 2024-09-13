@@ -10,46 +10,51 @@ export const handleMemeCommand = async (context: MessageContext) => {
     return;
   }
 
-  const messages = await getMessagesFromFirestore(chatId, 10);
+  try {
+    const messages = await getMessagesFromFirestore(chatId, 10);
 
-  const randomMessages = messages.map(msg => msg.text);
-  const memeText = randomMessages.join(' ').substring(0, 100);
+    const randomMessages = messages.map((msg) => msg.text);
+    const memeText = randomMessages.join(' ').substring(0, 100);
 
-  if (!memeText) {
-    await context.send('Не удалось сгенерировать текст для мема.');
-    return;
+    if (!memeText) {
+      await context.send('Не удалось сгенерировать текст для мема.');
+      return;
+    }
+
+    const randomTemplate = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
+
+    const image = await Jimp.read(randomTemplate);
+
+    const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+
+    const textWidth = image.bitmap.width - 40;
+    const textHeight = Jimp.measureTextHeight(font, memeText, textWidth);
+
+    image.print(
+      font,
+      20,
+      image.bitmap.height - textHeight - 20,
+      {
+        text: memeText,
+        alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+        alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM
+      },
+      textWidth,
+      textHeight
+    );
+
+    const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
+
+    const photo = await context.uploadPhoto({
+      source: buffer,
+      filename: 'meme.png',
+    });
+
+    await context.send({
+      attachment: `photo${photo.ownerId}_${photo.id}`
+    });
+  } catch (error) {
+    console.error('Failed to generate meme:', error);
+    await context.send('Произошла ошибка при генерации мема.');
   }
-
-  const randomTemplate = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
-
-  const image = await Jimp.read(randomTemplate);
-
-  const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
-
-  const textWidth = image.bitmap.width - 40;
-  const textHeight = Jimp.measureTextHeight(font, memeText, textWidth);
-
-  image.print(
-    font,
-    20,
-    image.bitmap.height - textHeight - 20,
-    {
-      text: memeText,
-      alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-      alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM
-    },
-    textWidth,
-    textHeight
-  );
-
-  const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
-
-  const photo = await context.uploadPhoto({
-    source: buffer,
-    filename: 'meme.png',
-  });
-
-  await context.send({
-    attachment: `photo${photo.ownerId}_${photo.id}`
-  });
 };
