@@ -1,10 +1,12 @@
-const Jimp: any = require('jimp');
+const Jimp = require('jimp');
 import { MessageContext, PhotoAttachment, VK } from 'vk-io';
 import { getMessagesFromFirestore } from './aiResponder';
 import { memeTemplates } from '../memeTemplates';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs';
+
+console.log(Jimp);
 
 export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
   try {
@@ -21,7 +23,7 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
 
     const randomTemplate = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
 
-    const image = await Jimp.default.read(randomTemplate);
+    const image = await Jimp.read(randomTemplate);
     const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
 
     image.print(
