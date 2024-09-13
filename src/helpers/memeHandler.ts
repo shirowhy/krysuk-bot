@@ -6,7 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs';
 import axios from 'axios';
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, loadImage, registerFont } from 'canvas';
+
+const fontPath = path.join(__dirname, '..', 'fonts', 'Impact.ttf');
+registerFont(fontPath, { family: 'Impact' });
 
 export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
   try {
@@ -21,6 +24,11 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
     console.log('Random messages for meme:', randomMessages);
     const memeText = randomMessages.join(' ').substring(0, 50);
 
+    const textParts = memeText.split(' ');
+    const middleIndex = Math.floor(textParts.length / 2);
+    const topText = textParts.slice(0, middleIndex).join(' ');
+    const bottomText = textParts.slice(middleIndex).join(' ');
+
     const randomTemplate = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
 
     const response = await axios.get(randomTemplate, { responseType: 'arraybuffer' });
@@ -34,12 +42,19 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
 
     ctx.drawImage(loadedImage, 0, 0);
 
-    ctx.font = '32px sans-serif';
+    ctx.font = '64px Impact';
     ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 6;
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
 
-    ctx.fillText(memeText, canvas.width / 2, 10, canvas.width - 20);
+    ctx.textBaseline = 'top';
+    ctx.strokeText(topText, canvas.width / 2, 10, canvas.width - 20);
+    ctx.fillText(topText, canvas.width / 2, 10, canvas.width - 20);
+
+    ctx.textBaseline = 'bottom';
+    ctx.strokeText(bottomText, canvas.width / 2, canvas.height - 10, canvas.width - 20);
+    ctx.fillText(bottomText, canvas.width / 2, canvas.height - 10, canvas.width - 20);
 
     const outputFileName = `${uuidv4()}.jpg`;
     const outputPath = path.resolve('/tmp', outputFileName);
