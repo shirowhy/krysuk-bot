@@ -31,16 +31,17 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
       source: { value: imageBuffer, filename: 'meme.jpg' }
     });
 
-    if (photo instanceof PhotoAttachment) {
-      const attachment = `photo${photo.ownerId}_${photo.id}`;
-      await context.send({
-        message: 'Вот ваш мем!',
-        attachment: attachment
-      });
-    } else {
-      console.error('Failed to get photo attachment');
-      await context.send('Произошла ошибка при получении фото.');
+    if (!photo || !(photo instanceof PhotoAttachment)) {
+      console.error('Failed to upload photo or incorrect photo type received.');
+      await context.send('Произошла ошибка при загрузке изображения.');
+      return;
     }
+
+    const attachment = `photo${photo.ownerId}_${photo.id}`;
+    await context.send({
+      message: 'Вот твой мем!',
+      attachment: attachment
+    });
 
   } catch (error) {
     console.error('Failed to generate meme:', error);
