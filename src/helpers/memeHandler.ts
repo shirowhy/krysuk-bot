@@ -22,7 +22,12 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
     const messages = await getRandomMessagesFromFirestore(chatId, 5);
     const randomMessages = messages.map(msg => (msg as unknown as { text: string }).text);
     const randomLength = Math.floor(Math.random() * 49) + 2;
-    const memeText = randomMessages.join(' ').substring(0, randomLength);
+    let memeText = randomMessages.join(' ').substring(0, randomLength);
+
+    const lastSpaceIndex = memeText.lastIndexOf(' ');
+    if (lastSpaceIndex > 0 && memeText.length === randomLength) {
+      memeText = memeText.substring(0, lastSpaceIndex);
+    }
 
     const textParts = memeText.split(' ');
     const middleIndex = Math.floor(textParts.length / 2);
