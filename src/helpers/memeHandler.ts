@@ -5,6 +5,7 @@ import { memeTemplates } from '../memeTemplates';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs';
+import axios from 'axios';
 import { createCanvas, loadImage } from 'canvas';
 
 export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
@@ -22,13 +23,16 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
 
     const randomTemplate = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
 
-    const imageBuffer = await sharp(randomTemplate).toBuffer();
-    const image = await loadImage(imageBuffer);
+    const response = await axios.get(randomTemplate, { responseType: 'arraybuffer' });
+    const imageBuffer = Buffer.from(response.data, 'binary');
 
-    const canvas = createCanvas(image.width, image.height);
+    const image = await sharp(imageBuffer).toBuffer();
+    const loadedImage = await loadImage(image);
+
+    const canvas = createCanvas(loadedImage.width, loadedImage.height);
     const ctx = canvas.getContext('2d');
 
-    ctx.drawImage(image, 0, 0);
+    ctx.drawImage(loadedImage, 0, 0);
 
     ctx.font = '32px sans-serif';
     ctx.fillStyle = 'white';
