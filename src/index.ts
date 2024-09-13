@@ -14,25 +14,25 @@ const { updates } = vk;
 
 updates.on('message_new', async (context) => {
   const commandText = context.text?.trim().toLowerCase() || '';
-  const messageText = context.text?.trim();
+  const originalMessageText = context.text?.trim();
 
-  console.log(`Received a new message: ${messageText}`);
+  console.log(`Received a new message: ${originalMessageText}`);
 
   if (context.isOutbox) {
     return;
   }
 
-  if (!messageText) {
+  if (!originalMessageText) {
     return;
   }
 
   let command: Command | undefined;
   const parts = commandText.split(' ');
 
-  if (messageText.startsWith('глитч кто')) {
+  if (commandText.startsWith('глитч кто')) {
     console.log('Detected command: глитч кто');
 
-    const commandParts = messageText.split(' ');
+    const commandParts = commandText.split(' ');
     const possibleFandom = commandParts[3];
 
     if (possibleFandom && !(possibleFandom in fandomMapping)) {
@@ -45,31 +45,32 @@ updates.on('message_new', async (context) => {
     return;
   }
 
-  if (messageText.startsWith('установить шанс')) {
+  if (commandText.startsWith('установить шанс')) {
     console.log('Detected command: установить шанс');
-    await handleCommand(context, vk, 'установить шанс', messageText.slice('установить шанс'.length).trim());
+    await handleCommand(context, vk, 'установить шанс', originalMessageText.slice('установить шанс'.length).trim());
     return;
   }
 
-  if (messageText.startsWith('проверить шанс')) {
+  if (commandText.startsWith('проверить шанс')) {
     console.log('Detected command: проверить шанс');
     await handleCommand(context, vk, 'проверить шанс', '');
     return;
   }
 
-  if (messageText.startsWith('глитч, че по интеллекту')) {
+  if (commandText.startsWith('глитч, че по интеллекту')) {
     console.log('Detected command: глитч, че по интеллекту');
     await handleCommand(context, vk, 'глитч, че по интеллекту', '');
     return;
   }
 
-  if (messageText.startsWith('крысюк') || messageText.startsWith('глитч') || messageText.startsWith('крыс')) {
+  const lowerCaseMessage = originalMessageText.toLowerCase();
+  if (lowerCaseMessage.startsWith('крысюк') || lowerCaseMessage.startsWith('глитч') || lowerCaseMessage.startsWith('крыс')) {
     console.log('Bot was mentioned, generating AI response...');
     await handleAIResponse(context, true);
     return;
   }
 
-  if (messageText !== command) {
+  if (originalMessageText !== command) {
     collectMessage(context);
   }
 
@@ -86,7 +87,7 @@ updates.on('message_new', async (context) => {
 
   if (command && command in commands) {
     console.log('Detected command:', command);
-    const targetUser = messageText.slice(command.length).trim();
+    const targetUser = originalMessageText.slice(command.length).trim();
     await handleCommand(context, vk, command, targetUser);
   } else {
     console.log('No command detected, generating AI response...');
