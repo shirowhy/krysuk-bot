@@ -21,7 +21,7 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
 
     const randomTemplate = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
 
-    const image = await Jimp.read(randomTemplate);
+    const image = await Jimp.default.read(randomTemplate);
     const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
 
     image.print(
