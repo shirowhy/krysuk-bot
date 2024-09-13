@@ -7,6 +7,7 @@ import path from 'path';
 import fs from 'fs';
 import axios from 'axios';
 import { createCanvas, loadImage, registerFont } from 'canvas';
+import { generateAIResponse } from './aiResponder';
 
 const fontPath = path.resolve(__dirname, '../fonts/impact.ttf');
 registerFont(fontPath, { family: 'Impact' });
@@ -20,16 +21,17 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
     }
 
     const messages = await getRandomMessagesFromFirestore(chatId, 5);
-    const randomMessages = messages.map(msg => (msg as unknown as { text: string }).text);
-    const randomLength = Math.floor(Math.random() * 49) + 2;
-    let memeText = randomMessages.join(' ').substring(0, randomLength);
+    const randomMessages = messages.map(msg => (msg as unknown as { text: string }).text).join(' ');
 
-    const lastSpaceIndex = memeText.lastIndexOf(' ');
-    if (lastSpaceIndex > 0 && memeText.length === randomLength) {
-      memeText = memeText.substring(0, lastSpaceIndex);
+    const aiResponse = await generateAIResponse(randomMessages, randomMessages);
+
+    if (!aiResponse) {
+      console.warn('AI response is empty, skipping meme generation.');
+      await context.send('Не удалось сгенерировать текст для мема.');
+      return;
     }
 
-    const textParts = memeText.split(' ');
+    const textParts = aiResponse.split(' ');
     const middleIndex = Math.floor(textParts.length / 2);
     const topText = textParts.slice(0, middleIndex).join(' ');
     const bottomText = textParts.slice(middleIndex).join(' ');

@@ -32,7 +32,7 @@ export const getMessagesFromFirestore = async (chatId: string, limitNumber: numb
   return messages;
 };
 
-const generateAIResponse = async (messageText: string, chatContext: string): Promise<string | null> => {
+export const generateAIResponse = async (messageText: string, chatContext: string): Promise<string | null> => {
   try {
     const apiKey = process.env.OPENAI_API_KEY;
 
