@@ -13,7 +13,9 @@ const vk = new VK({
 const { updates } = vk;
 
 updates.on('message_new', async (context) => {
-  const messageText = context.text?.trim().toLowerCase();
+  const commandText = context.text?.trim().toLowerCase() || '';
+  const messageText = context.text?.trim();
+
   console.log(`Received a new message: ${messageText}`);
 
   if (context.isOutbox) {
@@ -25,7 +27,7 @@ updates.on('message_new', async (context) => {
   }
 
   let command: Command | undefined;
-  const parts = messageText.split(' ');
+  const parts = commandText.split(' ');
 
   if (messageText.startsWith('глитч кто')) {
     console.log('Detected command: глитч кто');

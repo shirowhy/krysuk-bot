@@ -18,7 +18,7 @@ const commandCases: Record<Command, 'именительный' | 'винител
   'пожать руку': 'дательный',
   'закопать': 'винительный',
   'жамк': 'родительный',
-  'жамк-жамк': 'родительный',
+  'жамк-жамк': 'винительный',
   'съесть': 'винительный',
   'откусить': 'дательный',
   'аминь': 'дательный',
@@ -134,7 +134,7 @@ export const handleCommand = async (
     return;
   }
 
-  let formattedTargetUser = targetUser;
+  let formattedTargetUser = targetUser.trim();
   if (context.replyMessage) {
     const replyUserId = context.replyMessage.senderId;
     const replyUser = await vk.api.users.get({ user_ids: [replyUserId.toString()] });
