@@ -46,7 +46,7 @@ updates.on('message_new', async (context) => {
     return;
   }
 
-  if (commandText.startsWith('! мем')) {
+  if (commandText.startsWith('- мем')) {
     console.log('Detected command: мем');
     await handleMemeCommand(context, vk);
     return;
