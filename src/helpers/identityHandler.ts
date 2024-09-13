@@ -111,13 +111,15 @@ const handleShowAllIdentities = async (context: MessageContext) => {
       response += `${fandomKey.toUpperCase()}:\n`;
       logsSnapshot.forEach(doc => {
         const userData = doc.data();
-        response += `${userData.name} — ${userData[`${collectionName}_lastResponse`]}\n`;
+        const name = userData.name || 'Неизвестный';
+        const lastResponse = userData[`${collectionName}_lastResponse`];
+        response += `${name} — ${lastResponse}\n`;
       });
       response += '\n';
     }
   }
 
-  if (!response) {
+  if (!response.trim()) {
     response = 'Сегодня ни один фэндом еще не был вызван.';
   }
 
