@@ -111,9 +111,9 @@ const handleShowAllIdentities = async (context: MessageContext) => {
       response += `${fandomKey.toUpperCase()}:\n`;
       logsSnapshot.forEach(doc => {
         const userData = doc.data();
-        const name = userData.name || 'Неизвестный';
         const lastResponse = userData[`${collectionName}_lastResponse`];
-        response += `${name} — ${lastResponse}\n`;
+        const formattedResponse = lastResponse.replace(/, ты — /, ' — ');
+        response += `${formattedResponse}\n`;
       });
       response += '\n';
     }
