@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { MessageContext } from 'vk-io';
+import { MessageContext, PhotoAttachment, VK } from 'vk-io';
 import { getMessagesFromFirestore } from './aiResponder';
 import { memeTemplates } from '../memeTemplates';
 
-export const handleMemeCommand = async (context: MessageContext) => {
+export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
   try {
     const chatId = context.chatId?.toString();
     if (!chatId) {
@@ -27,15 +27,20 @@ export const handleMemeCommand = async (context: MessageContext) => {
     const response = await axios.get(memeUrl, { responseType: 'arraybuffer' });
     const imageBuffer = Buffer.from(response.data, 'binary');
 
-    const photo = await context.uploadPhoto({
-      source: imageBuffer,
-      filename: 'meme.jpg',
+    const photo = await vk.upload.messagePhoto({
+      source: { value: imageBuffer, filename: 'meme.jpg' }
     });
 
-    await context.send({
-      message: 'Вот ваш мем!',
-      attachment: `photo${photo.ownerId}_${photo.id}`
-    });
+    if (photo instanceof PhotoAttachment) {
+      const attachment = `photo${photo.ownerId}_${photo.id}`;
+      await context.send({
+        message: 'Вот ваш мем!',
+        attachment: attachment
+      });
+    } else {
+      console.error('Failed to get photo attachment');
+      await context.send('Произошла ошибка при получении фото.');
+    }
 
   } catch (error) {
     console.error('Failed to generate meme:', error);
