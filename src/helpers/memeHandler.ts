@@ -1,12 +1,11 @@
-const Jimp = require('jimp');
+import sharp from 'sharp';
 import { MessageContext, PhotoAttachment, VK } from 'vk-io';
 import { getMessagesFromFirestore } from './aiResponder';
 import { memeTemplates } from '../memeTemplates';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs';
-
-console.log(Jimp);
+import { createCanvas, loadImage } from 'canvas';
 
 export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
   try {
@@ -23,25 +22,25 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
 
     const randomTemplate = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
 
-    const image = await Jimp.read(randomTemplate);
-    const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+    const imageBuffer = await sharp(randomTemplate).toBuffer();
+    const image = await loadImage(imageBuffer);
 
-    image.print(
-      font,
-      10, // X coordinate
-      10, // Y coordinate
-      {
-        text: memeText,
-        alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-        alignmentY: Jimp.VERTICAL_ALIGN_TOP
-      },
-      image.bitmap.width - 20, // Max width of the text area
-      image.bitmap.height // Max height of the text area
-    );
+    const canvas = createCanvas(image.width, image.height);
+    const ctx = canvas.getContext('2d');
+
+    ctx.drawImage(image, 0, 0);
+
+    ctx.font = '32px sans-serif';
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+
+    ctx.fillText(memeText, canvas.width / 2, 10, canvas.width - 20);
 
     const outputFileName = `${uuidv4()}.jpg`;
     const outputPath = path.resolve('/tmp', outputFileName);
-    await image.writeAsync(outputPath);
+    const outputBuffer = canvas.toBuffer('image/jpeg');
+    fs.writeFileSync(outputPath, outputBuffer);
 
     const photo = await vk.upload.messagePhoto({
       source: {
@@ -50,7 +49,7 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
       }
     });
 
-    fs.unlinkSync(outputPath); // Deleting file after sending
+    fs.unlinkSync(outputPath);
 
     if (!photo || !(photo instanceof PhotoAttachment)) {
       console.error('Failed to upload photo or incorrect photo type received.');

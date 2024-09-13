@@ -13,12 +13,13 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.7.7",
+    "canvas": "^2.11.2",
     "dotenv": "^16.4.5",
     "firebase-admin": "^12.4.0",
     "form-data": "^4.0.0",
-    "jimp": "^1.6.0",
     "langs": "^2.0.0",
     "luxon": "^3.5.0",
+    "sharp": "^0.33.5",
     "typescript": "^5.5.4",
     "uuid": "^10.0.0",
     "vk-io": "^4.9.1"
