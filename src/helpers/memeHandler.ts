@@ -8,7 +8,7 @@ import fs from 'fs';
 import axios from 'axios';
 import { createCanvas, loadImage, registerFont } from 'canvas';
 
-const fontPath = '/app/dist/fonts/Impact.ttf';
+const fontPath = path.resolve(__dirname, '../fonts/impact.ttf');
 console.log('Font path:', fontPath);
 registerFont(fontPath, { family: 'Impact' });
 
