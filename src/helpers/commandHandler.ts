@@ -18,6 +18,7 @@ const commandCases: Record<Command, 'именительный' | 'винител
   'пожать руку': 'дательный',
   'закопать': 'винительный',
   'жамк': 'родительный',
+  'жамк-жамк': 'родительный',
   'съесть': 'винительный',
   'откусить': 'дательный',
   'аминь': 'дательный',
@@ -140,9 +141,11 @@ export const handleCommand = async (
     if (replyUser && replyUser.length > 0) {
       const name = replyUser[0].first_name;
       const caseType = commandCases[command];
-
       formattedTargetUser = formatNameForCase(name, caseType);
     }
+  } else {
+    const caseType = commandCases[command];
+    formattedTargetUser = formatNameForCase(targetUser, caseType);
   }
 
   const responseMessage = `${initiatorName} ${commands[command]} ${formattedTargetUser}`;
