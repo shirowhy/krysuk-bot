@@ -1,6 +1,6 @@
 import sharp from 'sharp';
+import { getRandomMessagesFromFirestore } from './firebaseHelper';
 import { MessageContext, PhotoAttachment, VK } from 'vk-io';
-import { getMessagesFromFirestore } from './aiResponder';
 import { memeTemplates } from '../memeTemplates';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
@@ -19,10 +19,10 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
       return;
     }
 
-    const messages = await getMessagesFromFirestore(chatId, 10);
-    const randomMessages = messages.map(msg => msg.text);
-    console.log('Random messages for meme:', randomMessages);
-    const memeText = randomMessages.join(' ').substring(0, 50);
+    const messages = await getRandomMessagesFromFirestore(chatId, 5);
+    const randomMessages = messages.map(msg => (msg as unknown as { text: string }).text);
+    const randomLength = Math.floor(Math.random() * 49) + 2;
+    const memeText = randomMessages.join(' ').substring(0, randomLength);
 
     const textParts = memeText.split(' ');
     const middleIndex = Math.floor(textParts.length / 2);
