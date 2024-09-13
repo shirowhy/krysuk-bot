@@ -14,7 +14,7 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
     const messages = await getMessagesFromFirestore(chatId, 10);
     const randomMessages = messages.map(msg => msg.text);
     console.log('Random messages for meme:', randomMessages);
-    const memeText = randomMessages.join(' ').substring(0, 100);
+    const memeText = randomMessages.join(' ').substring(0, 50);
     console.log('Meme text:', memeText);
 
     const randomTemplate = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
