@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && cp -R src/fonts dist/fonts",
+    "build": "tsc && mkdir dist\\fonts && xcopy src\\fonts dist\\fonts /E /I",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts"
   },
