@@ -8,7 +8,7 @@ import fs from 'fs';
 import axios from 'axios';
 import { createCanvas, loadImage, registerFont } from 'canvas';
 
-const fontPath = path.join(__dirname, '..', 'fonts', 'Impact.ttf');
+const fontPath = path.resolve(__dirname, '../../src/fonts/Impact.ttf');
 registerFont(fontPath, { family: 'Impact' });
 
 export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
