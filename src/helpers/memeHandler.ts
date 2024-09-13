@@ -1,9 +1,9 @@
 import { createCanvas, loadImage } from 'canvas';
-import { MessageContext } from 'vk-io';
+import { MessageContext, VK } from 'vk-io';
 import { memeTemplates } from '../memeTemplates';
 import { getMessagesFromFirestore } from './aiResponder';
 
-export const handleMemeCommand = async (context: MessageContext) => {
+export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
   try {
     const chatId = context.chatId?.toString();
     if (!chatId) {
@@ -40,9 +40,9 @@ export const handleMemeCommand = async (context: MessageContext) => {
     ctx.fillText(memeText, textX, textY);
 
     const buffer = canvas.toBuffer('image/jpeg');
-    const photo = await context.uploadPhoto({
-      source: buffer,
-      filename: 'meme.jpg',
+
+    const photo = await vk.upload.messagePhoto({
+      source: { value: buffer, filename: 'meme.jpg' },
     });
 
     await context.send({
