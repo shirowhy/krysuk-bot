@@ -1,5 +1,5 @@
 import { MessageContext } from 'vk-io';
-const Jimp = require('jimp');
+import Jimp from 'jimp';
 import { memeTemplates } from '../memeTemplates';
 import { getMessagesFromFirestore } from './aiResponder';
 
@@ -17,7 +17,7 @@ export const handleMemeCommand = async (context: MessageContext) => {
     const memeText = randomMessages.join(' ').substring(0, 100);
 
     if (!memeText) {
-      await context.send('Не удалось сгенерировать текст для мема.');
+      await context.send('Не удалось сгенерировать мемас :(');
       return;
     }
 
@@ -43,7 +43,7 @@ export const handleMemeCommand = async (context: MessageContext) => {
       textHeight
     );
 
-    const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
+    const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
 
     const photo = await context.uploadPhoto({
       source: buffer,
