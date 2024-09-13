@@ -24,6 +24,11 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
     const randomLength = Math.floor(Math.random() * 49) + 2;
     let memeText = randomMessages.join(' ').substring(0, randomLength);
 
+    const lastSpaceIndex = memeText.lastIndexOf(' ');
+    if (lastSpaceIndex > 0 && memeText.length === randomLength) {
+      memeText = memeText.substring(0, lastSpaceIndex);
+    }
+
     const textParts = memeText.split(' ');
     const middleIndex = Math.floor(textParts.length / 2);
     const topText = textParts.slice(0, middleIndex).join(' ');
