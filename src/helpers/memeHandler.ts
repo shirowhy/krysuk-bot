@@ -1,5 +1,7 @@
 import { createCanvas, loadImage } from 'canvas';
+import axios from 'axios';
 import { MessageContext, VK } from 'vk-io';
+import FormData from 'form-data';
 import { memeTemplates } from '../memeTemplates';
 import { getMessagesFromFirestore } from './aiResponder';
 
@@ -41,12 +43,30 @@ export const handleMemeCommand = async (context: MessageContext, vk: VK) => {
 
     const buffer = canvas.toBuffer('image/jpeg');
 
-    const photo = await vk.upload.messagePhoto({
-      source: { value: buffer, filename: 'meme.jpg' },
+    const uploadServer = await vk.api.photos.getMessagesUploadServer({
+      peer_id: context.peerId,
+    });
+
+    const formData = new FormData();
+    formData.append('photo', buffer, {
+      filename: 'meme.jpg',
+      contentType: 'image/jpeg',
+    });
+
+    const uploadResponse = await axios.post(uploadServer.upload_url, formData, {
+      headers: formData.getHeaders(),
+    });
+
+    const { photo, server, hash } = uploadResponse.data;
+
+    const savedPhoto = await vk.api.photos.saveMessagesPhoto({
+      photo,
+      server,
+      hash,
     });
 
     await context.send({
-      attachment: `photo${photo.ownerId}_${photo.id}`,
+      attachment: `photo${savedPhoto[0].owner_id}_${savedPhoto[0].id}`,
     });
   } catch (error) {
     console.error('Failed to generate meme:', error);
