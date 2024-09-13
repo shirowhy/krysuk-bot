@@ -5,6 +5,7 @@ import { handleAIResponse } from './helpers/aiResponder';
 import { commands, Command } from './commands';
 import { collectMessage } from './helpers/messageCollector';
 import { fandomMapping, handleIdentityCommand } from './helpers/identityHandler';
+import { handleMemeCommand } from './helpers/memeHandler';
 
 const vk = new VK({
   token: config.token
@@ -42,6 +43,12 @@ updates.on('message_new', async (context) => {
     }
 
     await handleIdentityCommand(context, vk);
+    return;
+  }
+
+  if (commandText.startsWith('! мем')) {
+    console.log('Detected command: мем');
+    await handleMemeCommand(context);
     return;
   }
 

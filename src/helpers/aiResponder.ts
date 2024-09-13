@@ -14,7 +14,7 @@ const preprocessText = (text: string): string => {
   return text.trim();
 };
 
-const getMessagesFromFirestore = async (chatId: string, limitNumber: number = 10): Promise<Message[]> => {
+export const getMessagesFromFirestore = async (chatId: string, limitNumber: number = 10): Promise<Message[]> => {
   const messages: Message[] = [];
   try {
     const q = db.collection("messages")
