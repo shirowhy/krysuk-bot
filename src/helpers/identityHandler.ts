@@ -2,7 +2,7 @@ import { MessageContext, VK } from 'vk-io';
 import { db } from '../firebase';
 import { DateTime } from 'luxon';
 
-const fandomMapping: Record<string, string> = {
+export const fandomMapping: Record<string, string> = {
   'генш': 'gensh',
   'титосы': 'AOT',
   'ззз': 'zzz'
@@ -27,7 +27,14 @@ export const handleIdentityCommand = async (context: MessageContext, vk: VK) => 
 
   const messageText = context.text?.trim().toLowerCase();
   const commandParts = messageText?.split(' ');
-  const fandom = commandParts?.[3];
+  const command = commandParts?.[2]; // 'кто я' or 'кто все'
+
+  if (command === 'все') {
+    await handleShowAllIdentities(context);
+    return;
+  }
+
+  const fandom = commandParts?.[3]; // 'генш' or 'титосы' or 'ззз'
 
   if (!fandom || !(fandom in fandomMapping)) {
     await context.send('Это чё? Такого фэндома нет. Попробуй "Глитч кто я генш", "Глитч кто я титосы" или "Глитч кто я ззз"');
@@ -81,4 +88,38 @@ export const handleIdentityCommand = async (context: MessageContext, vk: VK) => 
   });
 
   await context.send(response);
+};
+
+const handleShowAllIdentities = async (context: MessageContext) => {
+  const chatId = context.chatId?.toString();
+  if (!chatId) {
+    console.warn('Chat ID is undefined, skipping show all identities response.');
+    return;
+  }
+
+  const nowInMoscow = DateTime.now().setZone('Europe/Moscow');
+  const todayDate = nowInMoscow.toISODate();
+
+  let response = '';
+
+  for (const [fandomKey, collectionName] of Object.entries(fandomMapping)) {
+    const logsSnapshot = await db.collection(`${collectionName}_identity_logs`)
+      .where(`${collectionName}_lastGeneratedDate`, '==', todayDate)
+      .get();
+
+    if (!logsSnapshot.empty) {
+      response += `${fandomKey.toUpperCase()}:\n`;
+      logsSnapshot.forEach(doc => {
+        const userData = doc.data();
+        response += `${userData.name} — ${userData[`${collectionName}_lastResponse`]}\n`;
+      });
+      response += '\n';
+    }
+  }
+
+  if (!response) {
+    response = 'Сегодня ни один фэндом еще не был вызван.';
+  }
+
+  await context.send(response.trim());
 };

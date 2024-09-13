@@ -4,7 +4,7 @@ import { handleCommand } from './helpers/commandHandler';
 import { handleAIResponse } from './helpers/aiResponder';
 import { commands, Command } from './commands';
 import { collectMessage } from './helpers/messageCollector';
-import { handleIdentityCommand } from './helpers/identityHandler';
+import { fandomMapping, handleIdentityCommand } from './helpers/identityHandler';
 
 const vk = new VK({
   token: config.token
@@ -27,8 +27,18 @@ updates.on('message_new', async (context) => {
   let command: Command | undefined;
   const parts = messageText.split(' ');
 
-  if (messageText.startsWith('глитч кто я')) {
-    console.log('Detected command: глитч кто я');
+  if (messageText.startsWith('глитч кто')) {
+    console.log('Detected command: глитч кто');
+
+    const commandParts = messageText.split(' ');
+    const possibleFandom = commandParts[3];
+
+    if (possibleFandom && !(possibleFandom in fandomMapping)) {
+      console.log('Unknown fandom, delegating to AI...');
+      await handleAIResponse(context, true);
+      return;
+    }
+
     await handleIdentityCommand(context, vk);
     return;
   }
