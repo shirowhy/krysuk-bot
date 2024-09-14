@@ -19,6 +19,11 @@ const zodiacSigns: Record<string, string> = {
   'рыбы': '♓️'
 };
 
+interface HoroscopeLog {
+  lastGeneratedDate: string;
+  lastResponse: string;
+}
+
 const generateAIHoroscope = async (sign: string, trainingData: string): Promise<string | null> => {
   try {
     const apiKey = process.env.OPENAI_API_KEY;
@@ -70,7 +75,7 @@ export const handleHoroscopeCommand = async (
   const userDoc = await userDocRef.get();
 
   if (userDoc.exists) {
-    const userData = userDoc.data();
+    const userData = userDoc.data() as HoroscopeLog;
     const lastGeneratedDate = userData?.lastGeneratedDate;
     const lastResponse = userData?.lastResponse;
 
@@ -85,13 +90,26 @@ export const handleHoroscopeCommand = async (
 
   console.log('Horoscopes Data:', horoscopesData);
 
-  if (!horoscopesData || !horoscopesData['horoscopes-text']) {
-    console.error('No horoscopes found in Firestore.');
+  if (!horoscopesData) {
+    console.error('No horoscopes data object found in Firestore.');
+    await context.send('Что-то пошло не так, попробуйте позже.');
+    return;
+  }
+
+  if (!horoscopesData['horoscopes-text']) {
+    console.error('No horoscopes-text field found in Firestore.');
     await context.send('Что-то пошло не так, попробуйте позже.');
     return;
   }
 
   const horoscopes = horoscopesData['horoscopes-text'] as string[];
+
+  if (horoscopes.length === 0) {
+    console.error('Horoscopes array is empty in Firestore.');
+    await context.send('Что-то пошло не так, попробуйте позже.');
+    return;
+  }
+
   const trainingData = horoscopes.join('\n');
 
   const aiGeneratedHoroscope = await generateAIHoroscope(zodiacSign, trainingData);
