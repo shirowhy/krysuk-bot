@@ -90,21 +90,15 @@ export const handleHoroscopeCommand = async (
 
   console.log('Horoscopes Data:', horoscopesData);
 
-  if (!horoscopesData) {
+  if (!horoscopesData || !horoscopesData.data) {
     console.error('No horoscopes data object found in Firestore.');
     await context.send('Что-то пошло не так, попробуйте позже.');
     return;
   }
 
-  if (!horoscopesData['horoscopes-text']) {
-    console.error('No horoscopes-text field found in Firestore.');
-    await context.send('Что-то пошло не так, попробуйте позже.');
-    return;
-  }
+  const horoscopes = horoscopesData.data['horoscopes-text'] as string[];
 
-  const horoscopes = horoscopesData['horoscopes-text'] as string[];
-
-  if (horoscopes.length === 0) {
+  if (!horoscopes || horoscopes.length === 0) {
     console.error('Horoscopes array is empty in Firestore.');
     await context.send('Что-то пошло не так, попробуйте позже.');
     return;
@@ -128,3 +122,4 @@ export const handleHoroscopeCommand = async (
 
   await context.send(response);
 };
+
