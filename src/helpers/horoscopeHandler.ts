@@ -83,6 +83,8 @@ export const handleHoroscopeCommand = async (
   const horoscopesSnapshot = await db.collection('horoscopes').doc('horoscopes').get();
   const horoscopesData = horoscopesSnapshot.data();
 
+  console.log('Horoscopes Data:', horoscopesData);
+
   if (!horoscopesData || !horoscopesData['horoscopes-text']) {
     console.error('No horoscopes found in Firestore.');
     await context.send('Что-то пошло не так, попробуйте позже.');
