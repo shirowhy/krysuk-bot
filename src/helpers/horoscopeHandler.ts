@@ -113,7 +113,7 @@ export const handleHoroscopeCommand = async (
     return;
   }
 
-  const response = `${zodiacSigns[zodiacSign.toLowerCase()]}${zodiacSign.charAt(0).toUpperCase() + zodiacSign.slice(1)}:\n\n${aiGeneratedHoroscope}`;
+  const response = `${zodiacSigns[zodiacSign.toLowerCase()]}${zodiacSign.charAt(0).toUpperCase() + zodiacSign.slice(1)}: ${aiGeneratedHoroscope}`;
 
   await userDocRef.set({
     lastGeneratedDate: todayDate,
