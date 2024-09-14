@@ -32,7 +32,7 @@ const generateAIHoroscope = async (sign: string, trainingData: string): Promise<
       throw new Error('OpenAI API key is not defined');
     }
 
-    const prompt = `Сгенерируй нелепый гороскоп для знака зодиака ${sign} обучивший на следующих данных: \n\n${trainingData}. Количество знаков сохраняй примерно такое же как в базе данных, до 300 символов. НЕ добавляй обращения в начало текста, по типу "Овен,".`;
+    const prompt = `Сгенерируй нелепый гороскоп для знака зодиака ${sign}, используя следующие данные: \n\n${trainingData}. Добавь креативности, разнообразия и не повторяйся. Количество знаков должно быть до 300 символов. НЕ добавляй обращения в начало текста, по типу "Овен,".`;
 
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
       model: 'gpt-4-turbo',
@@ -40,8 +40,9 @@ const generateAIHoroscope = async (sign: string, trainingData: string): Promise<
         { role: 'system', content: aiSettings.systemMessage },
         { role: 'user', content: prompt }
       ],
-      max_tokens: aiSettings.maxTokens,
-      temperature: aiSettings.temperature,
+      max_tokens: 300,
+      temperature: aiSettings.temperature + 0.5,
+      top_p: aiSettings.topP
     }, {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -88,8 +89,6 @@ export const handleHoroscopeCommand = async (
   const horoscopesSnapshot = await db.collection('horoscopes').doc('horoscopes').get();
   const horoscopesData = horoscopesSnapshot.data();
 
-  console.log('Horoscopes Data:', horoscopesData);
-
   if (!horoscopesData || !horoscopesData.data) {
     console.error('No horoscopes data object found in Firestore.');
     await context.send('Что-то пошло не так, попробуйте позже.');
@@ -104,16 +103,17 @@ export const handleHoroscopeCommand = async (
     return;
   }
 
-  const trainingData = horoscopes.join('\n');
+  const shuffledHoroscopes = horoscopes.sort(() => 0.5 - Math.random()).slice(0, 10);
+  const trainingData = shuffledHoroscopes.join('\n');
 
   const aiGeneratedHoroscope = await generateAIHoroscope(zodiacSign, trainingData);
 
   if (!aiGeneratedHoroscope) {
-    await context.send('Не удалось сгенерировать гороскоп. Попробуйте позже.');
+    await context.send('Не удалось сгенерировать гороскоп. Попробуй позже 😕');
     return;
   }
 
-  const response = `${zodiacSigns[zodiacSign.toLowerCase()]}${zodiacSign.charAt(0).toUpperCase() + zodiacSign.slice(1)}:\n${aiGeneratedHoroscope}`;
+  const response = `${zodiacSigns[zodiacSign.toLowerCase()]}${zodiacSign.charAt(0).toUpperCase() + zodiacSign.slice(1)}:\n\n${aiGeneratedHoroscope}`;
 
   await userDocRef.set({
     lastGeneratedDate: todayDate,
@@ -122,4 +122,3 @@ export const handleHoroscopeCommand = async (
 
   await context.send(response);
 };
-
