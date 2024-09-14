@@ -32,7 +32,7 @@ const generateAIHoroscope = async (sign: string, trainingData: string): Promise<
       throw new Error('OpenAI API key is not defined');
     }
 
-    const prompt = `Сгенерируй нелепый гороскоп для знака зодиака ${sign} обучивший на следующих данных: \n\n${trainingData}. Количество знаков сохраняй примерно такое же как в базе данных, до 300 символов`;
+    const prompt = `Сгенерируй нелепый гороскоп для знака зодиака ${sign} обучивший на следующих данных: \n\n${trainingData}. Количество знаков сохраняй примерно такое же как в базе данных, до 300 символов. НЕ добавляй обращения в начало текста, по типу "Овен,".`;
 
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
       model: 'gpt-4-turbo',
@@ -113,7 +113,7 @@ export const handleHoroscopeCommand = async (
     return;
   }
 
-  const response = `${zodiacSigns[zodiacSign.toLowerCase()]}${zodiacSign.charAt(0).toUpperCase() + zodiacSign.slice(1)}:\n\n${aiGeneratedHoroscope}`;
+  const response = `${zodiacSigns[zodiacSign.toLowerCase()]}${zodiacSign.charAt(0).toUpperCase() + zodiacSign.slice(1)}:\n${aiGeneratedHoroscope}`;
 
   await userDocRef.set({
     lastGeneratedDate: todayDate,
