@@ -6,6 +6,7 @@ import { commands, Command } from './commands';
 import { collectMessage } from './helpers/messageCollector';
 import { fandomMapping, handleIdentityCommand } from './helpers/identityHandler';
 import { handleMemeCommand } from './helpers/memeHandler';
+import { handleHoroscopeCommand } from './helpers/horoscopeHandler';
 
 const vk = new VK({
   token: config.token
@@ -67,6 +68,12 @@ updates.on('message_new', async (context) => {
   if (commandText.startsWith('глитч, че по интеллекту')) {
     console.log('Detected command: глитч, че по интеллекту');
     await handleCommand(context, vk, 'глитч, че по интеллекту', '');
+    return;
+  }
+
+  if (commandText.startsWith('глитч гороскоп')) {
+    const zodiacSign = commandText.split(' ')[2];
+    await handleHoroscopeCommand(context, vk, zodiacSign);
     return;
   }
 
