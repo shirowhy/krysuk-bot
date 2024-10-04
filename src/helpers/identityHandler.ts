@@ -16,7 +16,8 @@ export const handleIdentityCommand = async (context: MessageContext, vk: VK) => 
   }
 
   const initiatorInfo = await vk.api.users.get({
-    user_ids: [context.senderId.toString()]
+    user_ids: [context.senderId.toString()],
+    lang: 'ru',
   });
 
   const initiatorId = context.senderId.toString();

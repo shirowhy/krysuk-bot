@@ -101,7 +101,8 @@ export const handleCommand = async (
   }
 
   const initiatorInfo = await vk.api.users.get({
-    user_ids: [context.senderId.toString()]
+    user_ids: [context.senderId.toString()],
+    lang: 'ru',
   });
 
   const initiatorName = initiatorInfo[0].first_name;
