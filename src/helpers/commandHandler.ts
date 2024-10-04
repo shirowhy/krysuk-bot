@@ -138,7 +138,7 @@ export const handleCommand = async (
   let formattedTargetUser = targetUser.trim();
   if (context.replyMessage) {
     const replyUserId = context.replyMessage.senderId;
-    const replyUser = await vk.api.users.get({ user_ids: [replyUserId.toString()] });
+    const replyUser = await vk.api.users.get({ user_ids: [replyUserId.toString()], lang: 'ru' });
     if (replyUser && replyUser.length > 0) {
       const name = replyUser[0].first_name;
       const caseType = commandCases[command];
