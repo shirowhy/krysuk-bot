@@ -48,15 +48,9 @@ updates.on('message_new', async (context) => {
     return;
   }
 
-  if (commandText.startsWith('глитч мой гача муж')) {
-    console.log('Detected command: глитч мой гача муж');
-    await handleHusbandCommand(context, vk); // Обработка команды "мой гача муж"
-    return;
-  }
-
-  if (commandText.startsWith('глитч все мужья')) {
-    console.log('Detected command: глитч все мужья');
-    await handleHusbandCommand(context, vk); // Обработка команды "все мужья"
+  if (commandText.startsWith('глитч мой гача муж') || commandText.startsWith('глитч все мужья')) {
+    console.log(`Detected command: ${commandText}`);
+    await handleHusbandCommand(context, vk, commandText); // Передаем текст команды
     return;
   }
 
