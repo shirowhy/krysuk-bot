@@ -7,6 +7,7 @@ import { collectMessage } from './helpers/messageCollector';
 import { fandomMapping, handleIdentityCommand } from './helpers/identityHandler';
 import { handleMemeCommand } from './helpers/memeHandler';
 import { handleHoroscopeCommand } from './helpers/horoscopeHandler';
+import { handleHusbandCommand } from './helpers/waifuHandler';
 
 const vk = new VK({
   token: config.token
@@ -44,6 +45,18 @@ updates.on('message_new', async (context) => {
     }
 
     await handleIdentityCommand(context, vk);
+    return;
+  }
+
+  if (commandText.startsWith('глитч мой гача муж')) {
+    console.log('Detected command: глитч мой гача муж');
+    await handleHusbandCommand(context, vk); // Обработка команды "мой гача муж"
+    return;
+  }
+
+  if (commandText.startsWith('глитч все мужья')) {
+    console.log('Detected command: глитч все мужья');
+    await handleHusbandCommand(context, vk); // Обработка команды "все мужья"
     return;
   }
 
