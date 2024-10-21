@@ -2,14 +2,14 @@ import { MessageContext, VK } from 'vk-io';
 import { db } from '../firebase';
 import { DateTime } from 'luxon';
 
-interface Husband {
+interface Partner {
     name: string;
 }
 
-export const handleHusbandCommand = async (context: MessageContext, vk: VK, commandText: string) => {
+export const handlePartnerCommand = async (context: MessageContext, vk: VK, commandText: string) => {
     const chatId = context.chatId?.toString();
     if (!chatId) {
-        console.warn('Chat ID is undefined, skipping husband response.');
+        console.warn('Chat ID is undefined, skipping response.');
         return;
     }
 
@@ -20,80 +20,111 @@ export const handleHusbandCommand = async (context: MessageContext, vk: VK, comm
 
     const initiatorName = initiatorInfo[0].first_name;
 
-    if (commandText.startsWith('глитч все мужья')) {
-        await handleShowAllHusbands(context);
+    if (commandText.startsWith('глитч все пары')) {
+        await handleShowAllPairs(context);
         return;
     }
 
     if (commandText.startsWith('глитч мой гача муж')) {
-        await assignHusband(context, initiatorName);
+        await assignPartner(context, initiatorName, 'husbands', 'assigned_husbands', 'твой муж');
+        return;
+    }
+
+    if (commandText.startsWith('глитч моя гача жена')) {
+        await assignPartner(context, initiatorName, 'wives', 'assigned_wives', 'твоя жена');
         return;
     }
 };
 
-const assignHusband = async (context: MessageContext, initiatorName: string) => {
+const assignPartner = async (
+    context: MessageContext, 
+    initiatorName: string, 
+    partnerCollection: string, 
+    assignedCollection: string, 
+    responseText: string
+) => {
     const nowInMoscow = DateTime.now().setZone('Europe/Moscow');
     const todayDate = nowInMoscow.toISODate();
 
-    const assignedHusbandDoc = await db.collection('assigned_husbands').doc(context.senderId.toString()).get();
-    if (assignedHusbandDoc.exists) {
-        const assignedHusbandData = assignedHusbandDoc.data();
-        const lastAssignedDate = assignedHusbandData?.dateAssigned;
+    const assignedDoc = await db.collection(assignedCollection).doc(context.senderId.toString()).get();
+    if (assignedDoc.exists) {
+        const assignedData = assignedDoc.data();
+        const lastAssignedDate = assignedData?.dateAssigned;
 
         if (lastAssignedDate === todayDate) {
-            const response = `${initiatorName}, твой муж — ${assignedHusbandData?.name}`;
+            const response = `${initiatorName}, ${responseText} — ${assignedData?.name}`;
             await context.send(response);
             return;
         }
     }
 
-    const husbandsDoc = await db.collection('husbands').doc('names').get();
-    if (!husbandsDoc.exists) {
-        console.error('Husbands document is missing in Firestore.');
+    const partnersDoc = await db.collection(partnerCollection).doc('names').get();
+    if (!partnersDoc.exists) {
+        console.error(`${partnerCollection} document is missing in Firestore.`);
         await context.send('Ой, что-то пошло не так. Попробуй позже!');
         return;
     }
 
-    const husbandsData = husbandsDoc.data();
-    const husbands = (husbandsData?.data?.names || []) as Husband[];
+    const partnersData = partnersDoc.data();
+    const partners = (partnersData?.data?.names || []) as Partner[];
 
-    if (husbands.length === 0 || !husbands.every(h => h.name)) {
-        console.error('Invalid data format: Expected array of objects with a "name" field.');
-        await context.send('Ой, данные с мужьями повреждены. Попробуй позже!');
+    if (partners.length === 0 || !partners.every(p => p.name)) {
+        console.error(`Invalid data format: Expected array of objects with a "name" field in ${partnerCollection}.`);
+        await context.send('Ой, данные повреждены. Попробуй позже!');
         return;
     }
 
-    const randomHusband = husbands[Math.floor(Math.random() * husbands.length)].name;
+    const randomPartner = partners[Math.floor(Math.random() * partners.length)].name;
 
-    await db.collection('assigned_husbands').doc(context.senderId.toString()).set({
-        name: randomHusband,
+    await db.collection(assignedCollection).doc(context.senderId.toString()).set({
+        name: randomPartner,
         userName: initiatorName,
         dateAssigned: todayDate,
     });
 
-    const response = `${initiatorName}, твой муж — ${randomHusband}`;
+    const response = `${initiatorName}, ${responseText} — ${randomPartner}`;
     await context.send(response);
 };
 
-const handleShowAllHusbands = async (context: MessageContext) => {
+const handleShowAllPairs = async (context: MessageContext) => {
     const nowInMoscow = DateTime.now().setZone('Europe/Moscow');
     const todayDate = nowInMoscow.toISODate();
 
+    // Fetch all assigned husbands
     const husbandsSnapshot = await db.collection('assigned_husbands')
         .where('dateAssigned', '==', todayDate)
         .get();
 
-    if (husbandsSnapshot.empty) {
-        await context.send('Сегодня ещё нет сладких парочек.');
+    // Fetch all assigned wives
+    const wivesSnapshot = await db.collection('assigned_wives')
+        .where('dateAssigned', '==', todayDate)
+        .get();
+
+    if (husbandsSnapshot.empty && wivesSnapshot.empty) {
+        await context.send('Сегодня ещё нет назначенных пар.');
         return;
     }
 
-    let response = 'Сегодняшние пары:\n';
+    let response = 'СЕГОДНЯШНИЕ ПАРЫ\n\n';
 
-    husbandsSnapshot.forEach(doc => {
-        const husbandData = doc.data();
-        response += `${husbandData.name}/${husbandData.userName}\n`;
-    });
+    // Handle husbands section
+    if (!husbandsSnapshot.empty) {
+        response += 'Мужья:\n';
+        husbandsSnapshot.forEach(doc => {
+            const husbandData = doc.data();
+            response += `${husbandData.name} / ${husbandData.userName}\n`;
+        });
+        response += '\n';
+    }
+
+    // Handle wives section
+    if (!wivesSnapshot.empty) {
+        response += 'Жены:\n';
+        wivesSnapshot.forEach(doc => {
+            const wifeData = doc.data();
+            response += `${wifeData.userName} / ${wifeData.name}\n`;
+        });
+    }
 
     await context.send(response.trim());
 };
