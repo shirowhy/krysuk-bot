@@ -31,7 +31,7 @@ export const handleIdentityCommand = async (context: MessageContext, vk: VK) => 
   const command = commandParts?.[2]; // 'кто я' or 'кто все'
 
   if (command === 'все') {
-    await handleShowAllIdentities(context);
+    await handleShowAllIdentities(context, chatId);
     return;
   }
 
@@ -42,8 +42,8 @@ export const handleIdentityCommand = async (context: MessageContext, vk: VK) => 
     return;
   }
 
-  const collectionName = fandomMapping[fandom];
-  const userDocRef = db.collection(`${collectionName}_identity_logs`).doc(initiatorId);
+  const collectionName = `${fandomMapping[fandom]}_identity_logs_${chatId}`;  // Логи для конкретного чата
+  const userDocRef = db.collection(collectionName).doc(initiatorId);
   const userDoc = await userDocRef.get();
 
   if (userDoc.exists) {
@@ -91,20 +91,14 @@ export const handleIdentityCommand = async (context: MessageContext, vk: VK) => 
   await context.send(response);
 };
 
-const handleShowAllIdentities = async (context: MessageContext) => {
-  const chatId = context.chatId?.toString();
-  if (!chatId) {
-    console.warn('Chat ID is undefined, skipping show all identities response.');
-    return;
-  }
-
+const handleShowAllIdentities = async (context: MessageContext, chatId: string) => {
   const nowInMoscow = DateTime.now().setZone('Europe/Moscow');
   const todayDate = nowInMoscow.toISODate();
 
   let response = '';
 
   for (const [fandomKey, collectionName] of Object.entries(fandomMapping)) {
-    const logsSnapshot = await db.collection(`${collectionName}_identity_logs`)
+    const logsSnapshot = await db.collection(`${collectionName}_identity_logs_${chatId}`)
       .where(`${collectionName}_lastGeneratedDate`, '==', todayDate)
       .get();
 

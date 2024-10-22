@@ -21,17 +21,17 @@ export const handlePartnerCommand = async (context: MessageContext, vk: VK, comm
     const initiatorName = initiatorInfo[0].first_name;
 
     if (commandText.startsWith('глитч все пары')) {
-        await handleShowAllPairs(context);
+        await handleShowAllPairs(context, chatId);
         return;
     }
 
     if (commandText.startsWith('глитч мой гача муж')) {
-        await assignPartner(context, initiatorName, 'husbands', 'assigned_husbands', 'твой муж');
+        await assignPartner(context, initiatorName, `husbands`, `assigned_husbands_${chatId}`, 'твой муж');
         return;
     }
 
     if (commandText.startsWith('глитч моя гача жена')) {
-        await assignPartner(context, initiatorName, 'wives', 'assigned_wives', 'твоя жена');
+        await assignPartner(context, initiatorName, `wives`, `assigned_wives_${chatId}`, 'твоя жена');
         return;
     }
 };
@@ -86,17 +86,17 @@ const assignPartner = async (
     await context.send(response);
 };
 
-const handleShowAllPairs = async (context: MessageContext) => {
+const handleShowAllPairs = async (context: MessageContext, chatId: string) => {
     const nowInMoscow = DateTime.now().setZone('Europe/Moscow');
     const todayDate = nowInMoscow.toISODate();
 
-    // Fetch all assigned husbands
-    const husbandsSnapshot = await db.collection('assigned_husbands')
+    // Fetch all assigned husbands for this chat
+    const husbandsSnapshot = await db.collection(`assigned_husbands_${chatId}`)
         .where('dateAssigned', '==', todayDate)
         .get();
 
-    // Fetch all assigned wives
-    const wivesSnapshot = await db.collection('assigned_wives')
+    // Fetch all assigned wives for this chat
+    const wivesSnapshot = await db.collection(`assigned_wives_${chatId}`)
         .where('dateAssigned', '==', todayDate)
         .get();
 
