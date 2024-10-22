@@ -16,8 +16,8 @@ export const collectMessage = async (context: MessageContext) => {
   };
 
   try {
-    const docRef = await db.collection('messages').add(message);
-    console.log('Message saved with ID:', docRef.id);
+    const docRef = await db.collection(`messages_${chatId}`).add(message);
+    console.log(`Message saved in collection 'messages_${chatId}' with ID:`, docRef.id);
   } catch (e) {
     console.error('Error saving message:', e as Error);
     const error = e as Error;

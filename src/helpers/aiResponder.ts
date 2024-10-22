@@ -17,8 +17,7 @@ const preprocessText = (text: string): string => {
 export const getMessagesFromFirestore = async (chatId: string, limitNumber: number = 10): Promise<Message[]> => {
   const messages: Message[] = [];
   try {
-    const q = db.collection("messages")
-      .where("chatId", "==", chatId)
+    const q = db.collection(`messages_${chatId}`)
       .orderBy("date", "desc")
       .limit(limitNumber);
     const querySnapshot = await q.get();

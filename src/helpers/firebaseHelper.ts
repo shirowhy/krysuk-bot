@@ -5,9 +5,9 @@ interface ChatSettings {
   responseChance: number;
 }
 
-export const getMessagesCountFromFirestore = async (): Promise<number> => {
+export const getMessagesCountFromFirestore = async (chatId: string): Promise<number> => {
   try {
-    const messagesRef = db.collection('messages');
+    const messagesRef = db.collection(`messages_${chatId}`);
     const snapshot = await messagesRef.get();
     return snapshot.size;
   } catch (error) {
@@ -59,8 +59,7 @@ export const getRandomMessagesFromFirestore = async (chatId: string, numberOfMes
   const allMessages: Message[] = [];
   const randomMessages: Message[] = [];
   try {
-    const q = db.collection("messages")
-      .where("chatId", "==", chatId);
+    const q = db.collection(`messages_${chatId}`);
 
     const querySnapshot = await q.get();
 
@@ -76,4 +75,25 @@ export const getRandomMessagesFromFirestore = async (chatId: string, numberOfMes
     console.error("Error getting random messages: ", e);
   }
   return randomMessages;
+};
+
+export const removeOldMessagesIfNeeded = async (chatId: string, limit: number = 5000): Promise<void> => {
+  try {
+    const messagesRef = db.collection(`messages_${chatId}`);
+    const snapshot = await messagesRef.orderBy('date', 'asc').get();
+
+    if (snapshot.size > limit) {
+      const messagesToDelete = snapshot.size - limit;
+      console.log(`Deleting ${messagesToDelete} old messages from chat: ${chatId}`);
+
+      const batch = db.batch();
+      snapshot.docs.slice(0, messagesToDelete).forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+      console.log(`Successfully deleted ${messagesToDelete} messages.`);
+    }
+  } catch (error) {
+    console.error('Error removing old messages from Firestore:', error);
+  }
 };

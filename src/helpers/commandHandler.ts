@@ -108,7 +108,7 @@ export const handleCommand = async (
   const initiatorName = initiatorInfo[0].first_name;
 
   if (command === 'глитч, че по интеллекту') {
-    const messageCount = await getMessagesCountFromFirestore();
+    const messageCount = await getMessagesCountFromFirestore(chatId);
     await context.send(`Я сохранил аж ${messageCount} сообщений из чата! Я крут? Определённо.`);
     return;
   }

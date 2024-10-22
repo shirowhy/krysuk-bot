@@ -52,7 +52,7 @@ updates.on('message_new', async (context) => {
     console.log(`Detected command: ${commandText}`);
     await handlePartnerCommand(context, vk, commandText);
     return;
-}
+  }
 
   if (commandText.startsWith('- мем')) {
     console.log('Detected command: мем');
