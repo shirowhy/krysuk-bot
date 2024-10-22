@@ -57,9 +57,9 @@ export const handleIdentityCommand = async (context: MessageContext, vk: VK) => 
     }
   }
 
-  const adjectivesDoc = await db.collection(`phrase_lists_${collectionName}`).doc('adjectives').get();
-  const subjectsDoc = await db.collection(`phrase_lists_${collectionName}`).doc('subjects').get();
-  const actionsDoc = await db.collection(`phrase_lists_${collectionName}`).doc('actions').get();
+  const adjectivesDoc = await db.collection(`phrase_lists_${fandomMapping[fandom]}`).doc('adjectives').get();
+  const subjectsDoc = await db.collection(`phrase_lists_${fandomMapping[fandom]}`).doc('subjects').get();
+  const actionsDoc = await db.collection(`phrase_lists_${fandomMapping[fandom]}`).doc('actions').get();
 
   if (!adjectivesDoc.exists || !subjectsDoc.exists || !actionsDoc.exists) {
     console.error('One or more documents are missing from Firestore.');
