@@ -25,10 +25,12 @@ export const getResponseChance = async (chatId: string): Promise<number> => {
   const chatRef = db.collection('chat_settings').doc(chatId);
   const chatDoc = await chatRef.get();
   if (chatDoc.exists) {
-    return chatDoc.data()?.responseChance || 5;
-  } else {
-    return 5;
+    const responseChance = chatDoc.data()?.responseChance;
+    if (responseChance !== undefined) {
+      return responseChance;
+    }
   }
+  return 5;
 };
 
 export const getChatSettings = async (chatId: number): Promise<ChatSettings> => {
