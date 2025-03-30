@@ -9,6 +9,9 @@ if (!raw) {
 let serviceAccount;
 try {
   serviceAccount = JSON.parse(raw);
+  if (typeof serviceAccount === 'string') {
+    serviceAccount = JSON.parse(serviceAccount);
+  }
   if (typeof serviceAccount !== 'object' || serviceAccount === null) {
     throw new Error('Parsed FIREBASE_CREDENTIALS is not an object');
   }
