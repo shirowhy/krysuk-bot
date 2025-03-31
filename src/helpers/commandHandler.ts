@@ -3,7 +3,7 @@ import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
 import axios from 'axios';
 import { getMessagesCountFromFirestore, getResponseChance, saveResponseChance } from './firebaseHelper';
-import { getFirstOfAprilReaction } from '../events/firstOfApril';
+import { getFirstOfAprilRandomCommand, getFirstOfAprilReaction } from '../events/firstOfApril';
 import { eventModeFirstOfAprilChats } from '../config/config';
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
@@ -155,7 +155,12 @@ export const handleCommand = async (
   ? getFirstOfAprilReaction(command, initiatorName, formattedTargetUser, chatId.toString())
   : `${initiatorName} ${commands[command]} ${formattedTargetUser}`;
 
-  const images = commandImages[command];
+  const actualCommand = eventModeFirstOfAprilChats.includes(chatId.toString())
+  ? getFirstOfAprilRandomCommand(command)
+  : command;
+
+const images = commandImages[actualCommand];
+
 
   let attachment = '';
   if (images && images.length > 0) {

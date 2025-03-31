@@ -23,3 +23,8 @@ export function getFirstOfAprilReaction(command: Command, from: string, to: stri
 
   return `${from} ${base} ${to}, ${ending}`;
 }
+
+export function getFirstOfAprilRandomCommand(original: Command): Command {
+  const availableCommands = Object.keys(commands).filter((c) => c !== original) as Command[];
+  return availableCommands[Math.floor(Math.random() * availableCommands.length)];
+}
