@@ -152,7 +152,7 @@ export const handleCommand = async (
   }
 
   const responseMessage = eventModeFirstOfAprilChats.includes(chatId.toString())
-  ? getFirstOfAprilReaction(command, initiatorName, formattedTargetUser, chatId.toString())
+  ? await getFirstOfAprilReaction(command, initiatorName, formattedTargetUser, chatId.toString())
   : `${initiatorName} ${commands[command]} ${formattedTargetUser}`;
 
   const actualCommand = eventModeFirstOfAprilChats.includes(chatId.toString())
@@ -160,7 +160,6 @@ export const handleCommand = async (
   : command;
 
 const images = commandImages[actualCommand];
-
 
   let attachment = '';
   if (images && images.length > 0) {

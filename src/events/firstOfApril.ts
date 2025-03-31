@@ -1,7 +1,13 @@
 import { commands, Command } from '../commands';
 import { eventModeFirstOfAprilChats } from '../config/config';
+import { getRandomSillyEnding } from '../helpers/getRandomSillyEnding';
 
-export function getFirstOfAprilReaction(command: Command, from: string, to: string, chatId: string): string {
+export async function getFirstOfAprilReaction(
+  command: Command,
+  from: string,
+  to: string,
+  chatId: string
+): Promise<string> {
   if (!eventModeFirstOfAprilChats.includes(chatId)) {
     return `${from} ${commands[command]} ${to}`;
   }
@@ -10,18 +16,12 @@ export function getFirstOfAprilReaction(command: Command, from: string, to: stri
   const random = availableCommands[Math.floor(Math.random() * availableCommands.length)];
   const base = commands[random];
 
-  const randomEndings = [
-    'так, что чуть глаза из орбит не повылезли',
-    'и тот начал подозрительно мурлыкать',
-    'так, что даже стены покраснели',
-    ', а воздух наполнился ароматом весёлой безысходности',
-    'и вызвал духов Крысиных Предков',
-    'настолько мощно, что чайник вскипел сам собой',
-  ];
-
-  const ending = randomEndings[Math.floor(Math.random() * randomEndings.length)];
-
-  return `${from} ${base} ${to}, ${ending}`;
+  try {
+    const ending = await getRandomSillyEnding(from, base, to);
+    return `${from} ${base} ${to}, ${ending}`;
+  } catch (err) {
+    return `${from} ${base} ${to}, и случилось что-то очень странное`;
+  }
 }
 
 export function getFirstOfAprilRandomCommand(original: Command): Command {
