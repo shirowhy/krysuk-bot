@@ -3,6 +3,7 @@ import { db } from '../firebase';
 
 interface ChatSettings {
   responseChance: number;
+  newsTemperature?: number;
 }
 
 export const getMessagesCountFromFirestore = async (chatId: string): Promise<number> => {
@@ -55,6 +56,23 @@ export const updateChatSettings = async (chatId: number, newSettings: Partial<Ch
   } else {
     await settingsRef.set(newSettings);
   }
+};
+
+export const getNewsTemperature = async (chatId: string): Promise<number> => {
+  const chatRef = db.collection('chat_settings').doc(chatId);
+  const doc = await chatRef.get();
+  if (doc.exists) {
+    const temperature = doc.data()?.newsTemperature;
+    if (typeof temperature === 'number') {
+      return temperature;
+    }
+  }
+  return 1.3;
+};
+
+export const saveNewsTemperature = async (chatId: string, temperature: number): Promise<void> => {
+  const chatRef = db.collection('chat_settings').doc(chatId);
+  await chatRef.set({ newsTemperature: temperature }, { merge: true });
 };
 
 export const getRandomMessagesFromFirestore = async (chatId: string, numberOfMessages: number = 5): Promise<Message[]> => {

@@ -1,9 +1,10 @@
 import { MessageContext, VK } from 'vk-io';
 import axios from 'axios';
+import { getNewsTemperature } from '../helpers/firebaseHelper';
 
 const openaiApiKey = process.env.OPENAI_API_KEY || '';
 
-const generateAbsurdNews = async (name: string): Promise<string> => {
+const generateAbsurdNews = async (name: string, temperature: number): Promise<string> => {
     const prompt = `Сгенерируй короткую абсурдную, нелепую и безопасную новость про человека по имени "${name}".
 Новость должна быть в стиле странных телеграм-каналов: сюрреалистичная, но не обидная.
 Пример: "${name} снова был замечен в районе хлебных 2D-мужей. Жители в ужасе."
@@ -15,7 +16,7 @@ const generateAbsurdNews = async (name: string): Promise<string> => {
             model: 'gpt-4-turbo',
             messages: [{ role: 'user', content: prompt }],
             max_tokens: 50,
-            temperature: 1.35,
+            temperature,
         },
         {
             headers: {
@@ -29,6 +30,9 @@ const generateAbsurdNews = async (name: string): Promise<string> => {
 };
 
 export const handleNewsCommand = async (context: MessageContext, vk: VK) => {
+    const chatId = context.chatId?.toString();
+    if (!chatId) return;
+
     let targetName = context.text?.split(' ')[2];
 
     if (context.replyMessage && !targetName) {
@@ -43,7 +47,8 @@ export const handleNewsCommand = async (context: MessageContext, vk: VK) => {
     }
 
     try {
-        const news = await generateAbsurdNews(targetName);
+        const temperature = await getNewsTemperature(chatId);
+        const news = await generateAbsurdNews(targetName, temperature);
         await context.send(`📰 ${news}`);
     } catch (err) {
         console.error('Ошибка генерации новости:', err);

@@ -10,6 +10,7 @@ import { handleHoroscopeCommand } from './helpers/horoscopeHandler';
 import { handlePartnerCommand } from './helpers/waifuHandler';
 import { handleTitleCommand } from './events/titlesHandler';
 import { handleNewsCommand } from './helpers/newsHandler';
+import { getNewsTemperature, saveNewsTemperature } from './helpers/firebaseHelper';
 
 const vk = new VK({
   token: config.token
@@ -95,8 +96,42 @@ updates.on('message_new', async (context) => {
   if (commandText.startsWith('глитч новости')) {
     await handleNewsCommand(context, vk);
     return;
-  }  
-  
+  }
+
+  if (commandText.startsWith('глитч проверить рандом')) {
+    const chatId = context.chatId?.toString();
+    if (!chatId) return;
+
+    const temperature = await getNewsTemperature(chatId.toString());
+    await context.send(`🎛 Текущая рандомность новостей: ${temperature.toFixed(2)}`);
+    return;
+  }
+
+  if (commandText.startsWith('глитч установить рандом')) {
+    const chatId = context.chatId?.toString();
+    if (!chatId) return;
+
+    const parts = commandText.split(' ');
+    const newValue = parseFloat(parts[3]);
+
+    if (isNaN(newValue) || newValue < 0 || newValue > 2) {
+      await context.send(`❗ Укажи значение от 0.0 до 2.0, например: "Глитч установить рандом 1.2"`);
+      return;
+    }
+
+    await saveNewsTemperature(chatId.toString(), newValue);
+
+    let warning = '';
+    if (newValue < 0.3) {
+      warning = '⚠️ Очень низкая рандомность — ответы будут супер-скучными и очевидными 🥱';
+    } else if (newValue > 1.5) {
+      warning = '⚠️ Высокая рандомность — вас ожидают слишком рандомные крейзи новости 🤙';
+    }
+
+    await context.send(`✅ Рандомность новостей установлена на ${newValue.toFixed(2)}${warning ? `\n\n${warning}` : ''}`);
+    return;
+  }
+
   const lowerCaseMessage = originalMessageText.toLowerCase();
   if (lowerCaseMessage.startsWith('крысюк') || lowerCaseMessage.startsWith('глитч') || lowerCaseMessage.startsWith('крыс')) {
     console.log('Bot was mentioned, generating AI response...');
