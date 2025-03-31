@@ -151,15 +151,14 @@ export const handleCommand = async (
     formattedTargetUser = formatNameForCase(targetUser, caseType);
   }
 
-  const responseMessage = eventModeFirstOfAprilChats.includes(chatId.toString())
-  ? await getFirstOfAprilReaction(command, initiatorName, formattedTargetUser, chatId.toString())
-  : `${initiatorName} ${commands[command]} ${formattedTargetUser}`;
+  const { text: responseMessage, command: actualCommand } = await getFirstOfAprilReaction(
+    command,
+    initiatorName,
+    formattedTargetUser,
+    chatId.toString()
+  );
 
-  const actualCommand = eventModeFirstOfAprilChats.includes(chatId.toString())
-  ? getFirstOfAprilRandomCommand(command)
-  : command;
-
-const images = commandImages[actualCommand];
+  const images = commandImages[actualCommand];
 
   let attachment = '';
   if (images && images.length > 0) {

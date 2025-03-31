@@ -7,9 +7,12 @@ export async function getFirstOfAprilReaction(
   from: string,
   to: string,
   chatId: string
-): Promise<string> {
+): Promise<{ text: string; command: Command }> {
   if (!eventModeFirstOfAprilChats.includes(chatId)) {
-    return `${from} ${commands[command]} ${to}`;
+    return {
+      text: `${from} ${commands[command]} ${to}`,
+      command,
+    };
   }
 
   const availableCommands = Object.keys(commands).filter((c) => c !== command) as Command[];
@@ -18,9 +21,15 @@ export async function getFirstOfAprilReaction(
 
   try {
     const ending = await getRandomSillyEnding(from, base, to);
-    return `${from} ${base} ${to}, ${ending}`;
+    return {
+      text: `${from} ${base} ${to}, ${ending}`,
+      command: random,
+    };
   } catch (err) {
-    return `${from} ${base} ${to}, и случилось что-то очень странное`;
+    return {
+      text: `${from} ${base} ${to}, и случилось что-то очень странное`,
+      command: random,
+    };
   }
 }
 
