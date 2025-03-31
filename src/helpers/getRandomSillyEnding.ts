@@ -3,7 +3,7 @@ import axios from 'axios';
 const apiKey = process.env.OPENAI_API_KEY || '';
 
 export async function getRandomSillyEnding(from: string, action: string, to: string): Promise<string> {
-    const prompt = `Придумай абсурдное, смешное, нелепое завершение для фразы: "${from} ${action} ${to},". Одной короткой фразой, например: "так, что все тараканы в округе закричали от страха". Но не помещай этот текст в кавычки.`;
+    const prompt = `Придумай короткое абсурдное и смешное завершение для фразы: "${from} ${action} ${to},". Завершение должно быть связано именно с этим действием — нелепое, сюрреалистичное или странное, но подходящее по смыслу. Например: "так, что все тараканы в округе закричали от страха". Ответ — только эта фраза, без кавычек.`;
 
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
         model: 'gpt-4-turbo',
