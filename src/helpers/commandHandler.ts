@@ -3,6 +3,8 @@ import { commands, Command } from '../commands';
 import { commandImages } from '../commandImages';
 import axios from 'axios';
 import { getMessagesCountFromFirestore, getResponseChance, saveResponseChance } from './firebaseHelper';
+import { getFirstOfAprilReaction } from '../events/firstOfApril';
+import { eventModeFirstOfAprilChats } from '../config/config';
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',
@@ -149,7 +151,10 @@ export const handleCommand = async (
     formattedTargetUser = formatNameForCase(targetUser, caseType);
   }
 
-  const responseMessage = `${initiatorName} ${commands[command]} ${formattedTargetUser}`;
+  const responseMessage = eventModeFirstOfAprilChats.includes(chatId.toString())
+  ? getFirstOfAprilReaction(command, initiatorName, formattedTargetUser, chatId.toString())
+  : `${initiatorName} ${commands[command]} ${formattedTargetUser}`;
+
   const images = commandImages[command];
 
   let attachment = '';

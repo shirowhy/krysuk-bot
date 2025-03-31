@@ -13,3 +13,5 @@ interface AllSettings {
 export const config = {
   token: process.env.TOKEN || ''
 };
+
+export const eventModeFirstOfAprilChats = ['1'];
