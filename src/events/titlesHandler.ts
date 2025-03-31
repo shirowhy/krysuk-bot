@@ -109,5 +109,5 @@ export const handleTitleCommand = async (context: MessageContext, vk: VK) => {
         lastTitle: randomTitle,
     });
 
-    await context.send(`${initiatorName}, сегодня ты — ${randomTitle}!`);
+    await context.send(`${initiatorName}, ты — ${randomTitle}.`);
 };
