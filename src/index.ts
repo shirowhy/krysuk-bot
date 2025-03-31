@@ -9,6 +9,7 @@ import { handleMemeCommand } from './helpers/memeHandler';
 import { handleHoroscopeCommand } from './helpers/horoscopeHandler';
 import { handlePartnerCommand } from './helpers/waifuHandler';
 import { handleTitleCommand } from './events/titlesHandler';
+import { handleNewsCommand } from './helpers/newsHandler';
 
 const vk = new VK({
   token: config.token
@@ -90,6 +91,11 @@ updates.on('message_new', async (context) => {
     await handleTitleCommand(context, vk);
     return;
   }
+
+  if (commandText.startsWith('глитч новости')) {
+    await handleNewsCommand(context, vk);
+    return;
+  }  
   
   const lowerCaseMessage = originalMessageText.toLowerCase();
   if (lowerCaseMessage.startsWith('крысюк') || lowerCaseMessage.startsWith('глитч') || lowerCaseMessage.startsWith('крыс')) {
