@@ -14,4 +14,4 @@ export const config = {
   token: process.env.TOKEN || ''
 };
 
-export const eventModeFirstOfAprilChats = ['1'];
+export const eventModeFirstOfAprilChats = ['1', '2', '3', '4'];

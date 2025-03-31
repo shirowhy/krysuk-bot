@@ -103,7 +103,7 @@ updates.on('message_new', async (context) => {
     if (!chatId) return;
 
     const temperature = await getNewsTemperature(chatId.toString());
-    await context.send(`🎛 Текущая рандомность новостей: ${temperature.toFixed(2)}`);
+    await context.send(`🎲 Текущая рандомность новостей: ${temperature.toFixed(2)}`);
     return;
   }
 
@@ -128,7 +128,7 @@ updates.on('message_new', async (context) => {
       warning = '⚠️ Высокая рандомность — вас ожидают слишком рандомные крейзи новости 🤙';
     }
 
-    await context.send(`✅ Рандомность новостей установлена на ${newValue.toFixed(2)}${warning ? `\n\n${warning}` : ''}`);
+    await context.send(`✅ Рандомность новостей установлена на ${parseFloat(newValue.toFixed(2))}${warning ? `\n\n${warning}` : ''}`);
     return;
   }
 
