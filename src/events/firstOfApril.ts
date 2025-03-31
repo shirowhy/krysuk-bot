@@ -1,4 +1,4 @@
-import { commands, Command } from '../commands';
+import { commands, Command, interactionCommands } from '../commands';
 import { eventModeFirstOfAprilChats } from '../config/config';
 import { getRandomSillyEnding } from '../helpers/getRandomSillyEnding';
 
@@ -15,8 +15,9 @@ export async function getFirstOfAprilReaction(
 ): Promise<ReactionResult> {
   const isEventMode = eventModeFirstOfAprilChats.includes(chatId);
 
+  const availableCommands = interactionCommands.filter((c) => c !== command);
   const selectedCommand: Command = isEventMode
-    ? (Object.keys(commands).filter((c) => c !== command)[Math.floor(Math.random() * (Object.keys(commands).length - 1))] as Command)
+    ? availableCommands[Math.floor(Math.random() * availableCommands.length)]
     : command;
 
   const base = commands[selectedCommand];
@@ -39,6 +40,6 @@ export async function getFirstOfAprilReaction(
 }
 
 export function getFirstOfAprilRandomCommand(original: Command): Command {
-  const availableCommands = Object.keys(commands).filter((c) => c !== original) as Command[];
+  const availableCommands = interactionCommands.filter((c) => c !== original);
   return availableCommands[Math.floor(Math.random() * availableCommands.length)];
 }
