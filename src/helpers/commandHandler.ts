@@ -1,10 +1,9 @@
 import { MessageContext, PhotoAttachment, VK } from 'vk-io';
-import { commands, Command } from '../commands';
+import { Command } from '../commands';
 import { commandImages } from '../commandImages';
 import axios from 'axios';
 import { getMessagesCountFromFirestore, getResponseChance, saveResponseChance } from './firebaseHelper';
-import { getFirstOfAprilRandomCommand, getFirstOfAprilReaction } from '../events/firstOfApril';
-import { eventModeFirstOfAprilChats } from '../config/config';
+import { getFirstOfAprilReaction } from '../events/firstOfApril';
 
 const commandCases: Record<Command, 'именительный' | 'винительный' | 'дательный' | 'родительный'> = {
   'погладить': 'винительный',

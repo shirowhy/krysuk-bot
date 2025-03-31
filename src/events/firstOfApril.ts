@@ -2,33 +2,38 @@ import { commands, Command } from '../commands';
 import { eventModeFirstOfAprilChats } from '../config/config';
 import { getRandomSillyEnding } from '../helpers/getRandomSillyEnding';
 
+interface ReactionResult {
+  text: string;
+  command: Command;
+}
+
 export async function getFirstOfAprilReaction(
   command: Command,
   from: string,
   to: string,
   chatId: string
-): Promise<{ text: string; command: Command }> {
-  if (!eventModeFirstOfAprilChats.includes(chatId)) {
-    return {
-      text: `${from} ${commands[command]} ${to}`,
-      command,
-    };
-  }
+): Promise<ReactionResult> {
+  const isEventMode = eventModeFirstOfAprilChats.includes(chatId);
 
-  const availableCommands = Object.keys(commands).filter((c) => c !== command) as Command[];
-  const random = availableCommands[Math.floor(Math.random() * availableCommands.length)];
-  const base = commands[random];
+  const selectedCommand: Command = isEventMode
+    ? (Object.keys(commands).filter((c) => c !== command)[Math.floor(Math.random() * (Object.keys(commands).length - 1))] as Command)
+    : command;
+
+  const base = commands[selectedCommand];
 
   try {
-    const ending = await getRandomSillyEnding(from, base, to);
+    const ending = isEventMode ? await getRandomSillyEnding(from, base, to) : '';
+    const message = isEventMode
+      ? `${from} ${base} ${to}, ${ending}`
+      : `${from} ${base} ${to}`;
     return {
-      text: `${from} ${base} ${to}, ${ending}`,
-      command: random,
+      text: message,
+      command: selectedCommand,
     };
   } catch (err) {
     return {
       text: `${from} ${base} ${to}, и случилось что-то очень странное`,
-      command: random,
+      command: selectedCommand,
     };
   }
 }
