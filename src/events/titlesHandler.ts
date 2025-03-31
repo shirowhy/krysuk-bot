@@ -104,7 +104,26 @@ export const handleTitleCommand = async (context: MessageContext, vk: VK) => {
         const isEventMode = eventModeFirstOfAprilChats.includes(chatId);
 
         if (isEventMode) {
-            randomTitle = HARDCODED_RAT_TITLES[Math.floor(Math.random() * HARDCODED_RAT_TITLES.length)];
+            const logsSnapshot = await db.collection(collectionName)
+                .where('lastGeneratedDate', '==', todayDate)
+                .get();
+
+            const usedTitles = new Set<string>();
+            logsSnapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.lastTitle) {
+                    usedTitles.add(data.lastTitle);
+                }
+            });
+
+            const availableTitles = HARDCODED_RAT_TITLES.filter(title => !usedTitles.has(title));
+
+            if (availableTitles.length === 0) {
+                await context.send('Все титулы на сегодня уже разобраны 😿');
+                return;
+            }
+
+            randomTitle = availableTitles[Math.floor(Math.random() * availableTitles.length)];
         } else {
             randomTitle = await generateAITitle();
         }
