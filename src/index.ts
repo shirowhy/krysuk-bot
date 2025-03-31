@@ -8,6 +8,7 @@ import { fandomMapping, handleIdentityCommand } from './helpers/identityHandler'
 import { handleMemeCommand } from './helpers/memeHandler';
 import { handleHoroscopeCommand } from './helpers/horoscopeHandler';
 import { handlePartnerCommand } from './helpers/waifuHandler';
+import { handleTitleCommand } from './events/titlesHandler';
 
 const vk = new VK({
   token: config.token
@@ -84,6 +85,12 @@ updates.on('message_new', async (context) => {
     return;
   }
 
+  if (commandText.startsWith('глитч титул')) {
+    console.log(`Detected command: ${commandText}`);
+    await handleTitleCommand(context, vk);
+    return;
+  }
+  
   const lowerCaseMessage = originalMessageText.toLowerCase();
   if (lowerCaseMessage.startsWith('крысюк') || lowerCaseMessage.startsWith('глитч') || lowerCaseMessage.startsWith('крыс')) {
     console.log('Bot was mentioned, generating AI response...');
