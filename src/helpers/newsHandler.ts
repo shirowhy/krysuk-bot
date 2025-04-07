@@ -5,9 +5,10 @@ import { getNewsTemperature } from '../helpers/firebaseHelper';
 const openaiApiKey = process.env.OPENAI_API_KEY || '';
 
 const generateAbsurdNews = async (name: string, temperature: number): Promise<string> => {
-    const prompt = `Сгенерируй короткую абсурдную, нелепую и безопасную новость про человека по имени "${name}".
+    const prompt = `Сгенерируй короткую абсурдную и нелепую новость про человека по имени "${name}".
 Новость должна быть в стиле странных телеграм-каналов: сюрреалистичная, но не обидная.
-Пример: "${name} снова был замечен в районе хлебных 2D-мужей. Жители в ужасе."
+Пример: "${name} снова был замечен в районе хлебных 2D-мужей. Жители в ужасе." 
+Старайся не повторять формулировки из предыдущих новостей. Используй неожиданные обороты, сюжеты и повороты. Делай так, чтобы каждая новость была уникальной.
 Без кавычек, одна строка, без пояснений.`;
 
     const res = await axios.post(
@@ -15,7 +16,7 @@ const generateAbsurdNews = async (name: string, temperature: number): Promise<st
         {
             model: 'gpt-4-turbo',
             messages: [{ role: 'user', content: prompt }],
-            max_tokens: 50,
+            max_tokens: 60,
             temperature,
         },
         {
