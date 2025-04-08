@@ -34,7 +34,11 @@ export const handleNewsCommand = async (context: MessageContext, vk: VK) => {
     const chatId = context.chatId?.toString();
     if (!chatId) return;
 
-    let targetName = context.text?.split(' ')[2];
+    const messageText = context.text?.trim();
+    if (!messageText) return;
+
+    const parts = messageText.split(' ').slice(2);
+    let targetName = parts.join(' ');
 
     if (context.replyMessage && !targetName) {
         const replyUserId = context.replyMessage.senderId;
@@ -47,9 +51,13 @@ export const handleNewsCommand = async (context: MessageContext, vk: VK) => {
         return;
     }
 
+    const formattedName = targetName.includes(' и ')
+        ? targetName.split(' и ').map(n => n.trim()).join(' и ')
+        : targetName.trim();
+
     try {
         const temperature = await getNewsTemperature(chatId);
-        const news = await generateAbsurdNews(targetName, temperature);
+        const news = await generateAbsurdNews(formattedName, temperature);
         await context.send(`📰 ${news}`);
     } catch (err) {
         console.error('Ошибка генерации новости:', err);

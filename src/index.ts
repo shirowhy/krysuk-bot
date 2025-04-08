@@ -8,7 +8,7 @@ import { fandomMapping, handleIdentityCommand } from './helpers/identityHandler'
 import { handleMemeCommand } from './helpers/memeHandler';
 import { handleHoroscopeCommand } from './helpers/horoscopeHandler';
 import { handlePartnerCommand } from './helpers/waifuHandler';
-import { handleTitleCommand } from './events/titlesHandler';
+import { handleTitleCommand } from './helpers/titlesHandler';
 import { handleNewsCommand } from './helpers/newsHandler';
 import { getNewsTemperature, saveNewsTemperature } from './helpers/firebaseHelper';
 
