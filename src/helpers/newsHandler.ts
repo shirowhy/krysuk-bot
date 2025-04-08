@@ -1,6 +1,8 @@
 import { MessageContext, VK } from 'vk-io';
 import axios from 'axios';
 import { getNewsTemperature } from '../helpers/firebaseHelper';
+import { db } from '../firebase';
+import { DateTime } from 'luxon';
 
 const openaiApiKey = process.env.OPENAI_API_KEY || '';
 
@@ -50,6 +52,31 @@ const generateAbsurdNews = async (nameInput: string, temperature: number): Promi
     return rawOutput;
 };
 
+const getSimilarityScore = (a: string, b: string): number => {
+    const setA = new Set(a.toLowerCase().split(/\s+/));
+    const setB = new Set(b.toLowerCase().split(/\s+/));
+    const intersection = new Set([...setA].filter(x => setB.has(x)));
+    const union = new Set([...setA, ...setB]);
+    return intersection.size / union.size;
+};
+
+const isTooSimilar = (newText: string, previous: string[]): boolean => {
+    return previous.some(old => getSimilarityScore(old, newText) > 0.85);
+};
+
+const cleanOldNewsLogs = async (chatId: string) => {
+    const thirtyDaysAgo = DateTime.now().minus({ days: 30 }).toISO();
+    const oldNews = await db.collection(`absurd_news_logs_${chatId}`)
+        .where('date', '<', thirtyDaysAgo)
+        .get();
+
+    const batch = db.batch();
+    oldNews.docs.forEach(doc => batch.delete(doc.ref));
+    if (!oldNews.empty) {
+        await batch.commit();
+    }
+};
+
 export const handleNewsCommand = async (context: MessageContext, vk: VK) => {
     const chatId = context.chatId?.toString();
     if (!chatId) return;
@@ -76,9 +103,30 @@ export const handleNewsCommand = async (context: MessageContext, vk: VK) => {
         : targetName.trim();
 
     try {
+        await cleanOldNewsLogs(chatId);
         const temperature = await getNewsTemperature(chatId);
-        const news = await generateAbsurdNews(formattedName, temperature);
+
+        const recentNewsSnap = await db.collection(`absurd_news_logs_${chatId}`)
+            .where('date', '>=', DateTime.now().minus({ days: 30 }).toISO())
+            .get();
+
+        const recentTexts = recentNewsSnap.docs.map(doc => doc.data().text as string);
+
+        let news = await generateAbsurdNews(formattedName, temperature);
+        let attempts = 0;
+
+        while (isTooSimilar(news, recentTexts) && attempts < 2) {
+            news = await generateAbsurdNews(formattedName, temperature);
+            attempts++;
+        }
+
         await context.send(`📰 ${news}`);
+
+        await db.collection(`absurd_news_logs_${chatId}`).add({
+            date: DateTime.now().toISO(),
+            name: targetName,
+            text: news,
+        });
     } catch (err) {
         console.error('Ошибка генерации новости:', err);
         await context.send('Новостной телеканал КРЫСА-ТВ крашнулся. Увидимся позже 🥲');
