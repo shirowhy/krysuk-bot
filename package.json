@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && node copyFonts.js",
+    "build": "tsc && cp ./data/memes.json ./dist/ && node copyFonts.js",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts"
   },
