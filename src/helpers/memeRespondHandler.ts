@@ -14,5 +14,7 @@ export async function handleMemeResponse(context: any, vk: VK) {
         return;
     }
 
-    await context.sendPhoto(memeUrl);
+    await context.send({
+        attachment: memeUrl
+    });
 }

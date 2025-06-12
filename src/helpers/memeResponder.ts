@@ -30,12 +30,12 @@ export async function detectMood(message: string): Promise<string> {
     return response.toLowerCase().trim();
 }
 
-export async function maybeSendMeme(ctx: { text: string; chatId: string; sendPhoto: (url: string) => Promise<void> }) {
+export async function maybeSendMeme(ctx: { text: string; chatId: string; send: (opts: { attachment: string }) => Promise<void> }) {
     if (!memeDebugChats.includes(String(ctx.chatId))) return;
 
     const mood = await detectMood(ctx.text);
     const meme = getMemeByMood(mood);
     if (meme) {
-        await ctx.sendPhoto(meme);
+        await ctx.send({ attachment: meme });
     }
 }
