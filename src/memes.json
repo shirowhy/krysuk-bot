@@ -1,0 +1,271 @@
+[
+    {
+        "filename": "god_is_ashamed.jpg",
+        "description": "God is ashamed of your actions. Use when the user does something ridiculous or embarrassing.",
+        "moods": [
+            "shame",
+            "embarrassment",
+            "sarcasm"
+        ]
+    },
+    {
+        "filename": "hopeless_man.jpg",
+        "description": "A man looks at a noose with ironic intent. Use when something mildly unfortunate happens, like pulling the wrong item. Do NOT use for serious issues.",
+        "moods": [
+            "disappointment",
+            "irony",
+            "mock-despair"
+        ]
+    },
+    {
+        "filename": "bonk_you_deserve_better.jpg",
+        "description": "A flick to the user’s forehead. Use when the user speaks badly about themselves or insults others.",
+        "moods": [
+            "warning",
+            "disapproval",
+            "light scolding"
+        ]
+    },
+    {
+        "filename": "falling_off_bed.jpg",
+        "description": "A man falls off the bed in shock. Use when something scary or unexpected appears in chat. Also fits random chaotic moments.",
+        "moods": [
+            "shock",
+            "chaos",
+            "surprise"
+        ]
+    },
+    {
+        "filename": "yamete_screaming.jpg",
+        "description": "A frog yelling 'STOP'. Use to interrupt something disturbing or annoying.",
+        "moods": [
+            "annoyance",
+            "panic",
+            "intervention"
+        ]
+    },
+    {
+        "filename": "stop_hand.jpg",
+        "description": "A character throws their hand out and backs away suddenly, as if the user scared them.",
+        "moods": [
+            "fear",
+            "surprise",
+            "rejection"
+        ]
+    },
+    {
+        "filename": "now_you_have_seen_him.jpg",
+        "description": "A tree poster says 'Have you seen him? Now you have :)' showing Tartaglia. Use randomly or in Childe-related conversations.",
+        "moods": [
+            "random",
+            "genshin",
+            "chaotic neutral"
+        ]
+    },
+    {
+        "filename": "penguin_noted.jpg",
+        "description": "A penguin writes 'Noted' in a notebook. Fits almost any message, used ironically.",
+        "moods": [
+            "irony",
+            "acknowledgement",
+            "deadpan"
+        ]
+    },
+    {
+        "filename": "throw_rat.jpg",
+        "description": "A man throws a rat. Use when someone says 'крыса'.",
+        "moods": [
+            "rat",
+            "reaction",
+            "targeted"
+        ]
+    },
+    {
+        "filename": "jesus_shocked.jpg",
+        "description": "Jesus is visibly shocked by what he's just read. Use for shocking or blasphemous messages.",
+        "moods": [
+            "shock",
+            "disbelief",
+            "dramatic"
+        ]
+    },
+    {
+        "filename": "heart_touching_doge.jpg",
+        "description": "Doge gently touches his heart. Use when something is heartwarming or emotionally touching.",
+        "moods": [
+            "wholesome",
+            "emotion",
+            "heartwarming"
+        ]
+    },
+    {
+        "filename": "sorry_for_cringe.jpg",
+        "description": "Bot apologizing for the cringe. Use when the bot itself did or said something awkward or embarrassing.",
+        "moods": [
+            "cringe",
+            "apology",
+            "awkward"
+        ]
+    },
+    {
+        "filename": "smiling_in_chaos.jpg",
+        "description": "A character smiling calmly while everything burns in the background. Use during chaotic or absurd moments.",
+        "moods": [
+            "chaos",
+            "absurd",
+            "comedy"
+        ]
+    },
+    {
+        "filename": "crying_yamero_bird.jpg",
+        "description": "A teary-eyed bird saying 'Yamero' (stop it). Use when something emotionally overwhelming or sad happens.",
+        "moods": [
+            "sadness",
+            "overwhelmed",
+            "emotional"
+        ]
+    },
+    {
+        "filename": "eyebrow_meme.jpg",
+        "description": "A character raising an eyebrow like 'gotcha' or 'really?'. Use in sarcastic or suspicious replies.",
+        "moods": [
+            "suspicion",
+            "sarcasm",
+            "gotcha"
+        ]
+    },
+    {
+        "filename": "intellectual_face.jpg",
+        "description": "Text says 'a face full of intellect'. Use sarcastically on the bot’s own messages or things like 'сглыпа)'.",
+        "moods": [
+            "sarcasm",
+            "self-aware",
+            "irony"
+        ]
+    },
+    {
+        "filename": "possum_scream.jpg",
+        "description": "A possum screaming 'AAAA'. Use when something is panic-inducing, chaotic, or just too much.",
+        "moods": [
+            "panic",
+            "chaos",
+            "overreaction"
+        ]
+    },
+    {
+        "filename": "joey_realization.jpg",
+        "description": "A character smiling while internally in total shock. Use when pretending everything is fine, but it’s really not.",
+        "moods": [
+            "shock",
+            "denial",
+            "internal_screaming"
+        ]
+    },
+    {
+        "filename": "stop_it_now.jpg",
+        "description": "A character wagging their finger in front of their face, like 'tsk tsk, stop it'. Use to call out someone’s behavior.",
+        "moods": [
+            "disapproval",
+            "warning",
+            "mild_reprimand"
+        ]
+    },
+    {
+        "filename": "pathetic_girl.jpg",
+        "description": "Qiqi from Genshin looking down with the text 'Pathetic'. Use to mock someone gently.",
+        "moods": [
+            "mockery",
+            "sarcasm",
+            "genshin"
+        ]
+    },
+    {
+        "filename": "anime_judges_crying_100.jpg",
+        "description": "Anime judges crying while giving a perfect 10/10 score. Use when praising someone dramatically.",
+        "moods": [
+            "praise",
+            "dramatic",
+            "approval"
+        ]
+    },
+    {
+        "filename": "holds_boobs_in_fear.jpg",
+        "description": "A character holding their own boobs in fear with the caption 'hold boobs in fear'. Use during scary or absurd situations.",
+        "moods": [
+            "fear",
+            "absurd",
+            "reaction"
+        ]
+    },
+    {
+        "filename": "phone_kiss_comic.jpg",
+        "description": "Comic where a girl looks at her phone lovingly, then kisses it. Use when someone says something sweet or flattering.",
+        "moods": [
+            "love",
+            "affection",
+            "wholesome"
+        ]
+    },
+    {
+        "filename": "gun_raise_intense.jpg",
+        "description": "A character raising a gun in a fake-intense way. Use as an ironic overreaction or threat.",
+        "moods": [
+            "sarcasm",
+            "fake_anger",
+            "joking_threat"
+        ]
+    },
+    {
+        "filename": "nun_praying_pc.jpg",
+        "description": "A nun prays in front of her computer. Use after seeing something cursed or sinful in chat.",
+        "moods": [
+            "holy",
+            "cursed",
+            "reaction"
+        ]
+    },
+    {
+        "filename": "god_forgives_i_dont.jpg",
+        "description": "Character loading a shotgun with the caption 'God forgives, I don't'. Use when someone's behavior crosses the line.",
+        "moods": [
+            "judgment",
+            "warning",
+            "dark_humor"
+        ]
+    },
+    {
+        "filename": "hahant_doge_clown.jpg",
+        "description": "Doge dressed as a clown with 'hahan't' written. Use when something was supposed to be funny but failed.",
+        "moods": [
+            "cringe",
+            "sarcasm",
+            "sad_clown"
+        ]
+    },
+    {
+        "filename": "no_thanks_already_cried.jpg",
+        "description": "A bright ironic image saying 'No thanks, I already cried today'. Use when someone shares something sad.",
+        "moods": [
+            "irony",
+            "emotional",
+            "avoidance"
+        ]
+    },
+    {
+        "filename": "lying_cat_rant.jpg",
+        "description": "A smug cat with a caption revealing he just lied to you. Use in response to obvious lies or sarcasm.",
+        "moods": [
+            "lying",
+            "sarcasm",
+            "smug"
+        ]
+    },
+    {
+        "filename": "you_are_queen.jpg",
+        "description": "A guy telling someone: 'You're a lioness, a true queen, a natural winner'. Use to uplift someone.",
+        "moods": [
+            "support",
+            "mock_inspiration"
+        ]
+    }
+]
