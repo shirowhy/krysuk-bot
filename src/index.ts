@@ -11,6 +11,7 @@ import { handlePartnerCommand } from './helpers/waifuHandler';
 import { handleTitleCommand } from './helpers/titlesHandler';
 import { handleNewsCommand } from './helpers/newsHandler';
 import { getNewsTemperature, saveNewsTemperature } from './helpers/firebaseHelper';
+import { handleMemeResponse } from './helpers/memeRespondHandler';
 
 const vk = new VK({
   token: config.token
@@ -129,6 +130,12 @@ updates.on('message_new', async (context) => {
     }
 
     await context.send(`✅ Рандомность новостей установлена на ${parseFloat(newValue.toFixed(2))}${warning ? `\n\n${warning}` : ''}`);
+    return;
+  }
+
+  if (commandText === 'кинь мем') {
+    console.log('Detected command: Кинь мем');
+    await handleMemeResponse(context, vk);
     return;
   }
 
