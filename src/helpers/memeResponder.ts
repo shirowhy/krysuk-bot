@@ -30,8 +30,19 @@ export async function detectMood(message: string): Promise<string> {
     return response.toLowerCase().trim();
 }
 
-export async function maybeSendMeme(ctx: { text: string; chatId: string; send: (opts: { attachment: string }) => Promise<void> }) {
+export async function maybeSendMeme(ctx: {
+    text: string;
+    chatId: string;
+    send: (opts: { attachment: string }) => Promise<void>;
+}) {
     if (!memeDebugChats.includes(String(ctx.chatId))) return;
+
+    const responseChance = 100;
+    const roll = Math.random() * 100;
+
+    console.log(`🎲 Meme roll: ${roll}, Response chance: ${responseChance}${roll < responseChance ? ' - Sending meme.' : ' - No response.'}`);
+
+    if (roll >= responseChance) return;
 
     const mood = await detectMood(ctx.text);
     const meme = getMemeByMood(mood);
@@ -39,3 +50,4 @@ export async function maybeSendMeme(ctx: { text: string; chatId: string; send: (
         await ctx.send({ attachment: meme });
     }
 }
+

@@ -3,7 +3,6 @@ import { detectMood, getMemeByMood } from './memeResponder';
 
 export async function handleMemeResponse(context: any, vk: VK) {
     const repliedMessage = context.replyMessage;
-
     if (!repliedMessage || !repliedMessage.text) return;
 
     const mood = await detectMood(repliedMessage.text);
@@ -14,7 +13,19 @@ export async function handleMemeResponse(context: any, vk: VK) {
         return;
     }
 
-    await context.send({
-        attachment: memeUrl
-    });
+    try {
+        const attachment = await vk.upload.messagePhoto({
+            source: {
+                value: memeUrl,
+            },
+            peer_id: context.peerId,
+        });
+
+        await context.send({
+            attachment,
+        });
+    } catch (err) {
+        console.error('Ошибка при загрузке мема:', err);
+        await context.send(memeUrl);
+    }
 }
