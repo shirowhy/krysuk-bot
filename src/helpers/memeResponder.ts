@@ -3,7 +3,7 @@ import path from 'path';
 import { askGPT } from './askGPT';
 import { memeDebugChats } from '../config/config';
 
-const memesPath = path.resolve(__dirname, './memes.json');
+const memesPath = path.resolve(__dirname, '../memes.json');
 export const memes: Meme[] = JSON.parse(readFileSync(memesPath, 'utf-8'));
 
 export type Meme = {
