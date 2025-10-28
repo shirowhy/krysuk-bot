@@ -37,10 +37,10 @@ export const handlePartnerCommand = async (context: MessageContext, vk: VK, comm
 };
 
 const assignPartner = async (
-    context: MessageContext, 
-    initiatorName: string, 
-    partnerCollection: string, 
-    assignedCollection: string, 
+    context: MessageContext,
+    initiatorName: string,
+    partnerCollection: string,
+    assignedCollection: string,
     responseText: string
 ) => {
     const nowInMoscow = DateTime.now().setZone('Europe/Moscow');
@@ -105,24 +105,24 @@ const handleShowAllPairs = async (context: MessageContext, chatId: string) => {
         return;
     }
 
-    let response = 'СЕГОДНЯШНИЕ ПАРЫ\n\n';
+    let response = 'СЕГОДНЯШНИЕ ПАРЫ 💍\n\n';
 
     // Handle husbands section
     if (!husbandsSnapshot.empty) {
-        response += 'Мужья:\n';
+        response += 'МУЖЬЯ 🤵‍♂️\n';
         husbandsSnapshot.forEach(doc => {
             const husbandData = doc.data();
-            response += `${husbandData.name} / ${husbandData.userName}\n`;
+            response += `${husbandData.name} + ${husbandData.userName}\n`;
         });
         response += '\n';
     }
 
     // Handle wives section
     if (!wivesSnapshot.empty) {
-        response += 'Жены:\n';
+        response += 'ЖËНЫ 👰‍♀️\n';
         wivesSnapshot.forEach(doc => {
             const wifeData = doc.data();
-            response += `${wifeData.userName} / ${wifeData.name}\n`;
+            response += `${wifeData.userName} + ${wifeData.name}\n`;
         });
     }
 
